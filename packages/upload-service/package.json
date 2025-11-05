@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    ".": "./lib/s3-client.ts",
     "./s3": "./lib/s3-client.ts",
     "./presign": "./lib/presign.ts",
     "./multipart": "./lib/multipart.ts"

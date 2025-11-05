@@ -1,30 +1,47 @@
 import fs from 'fs/promises';
 import path from 'path';
-import type { Company, CaseItem, RentalItem, User, CarouselItem, HomeContentItem, AboutItem } from '@/types';
+import type { Company, CaseItem, RentalItem, User, CarouselItem, HomeContentItem, AboutItem, ContactMessage } from '@/types';
+import { readJSON as readS3JSON, writeJSON as writeS3JSON, listJSON, deleteJSON } from './s3-storage';
+import { v4 as uuidv4 } from 'uuid';
 
 const DATA_DIR = path.join(process.cwd(), 'lib', 'data');
 
-// 讀取 JSON 文件
+// 是否使用 S3 存储（生产环境使用 S3，开发环境使用本地文件）
+const USE_S3 = process.env.NODE_ENV === 'production' || process.env.FORCE_S3 === 'true';
+
+// 讀取 JSON 文件（支持本地文件系统和 S3）
 async function readJSON<T>(filename: string): Promise<T | null> {
-  try {
-    const filePath = path.join(DATA_DIR, filename);
-    const content = await fs.readFile(filePath, 'utf-8');
-    return JSON.parse(content) as T;
-  } catch (error) {
-    console.error(`Error reading ${filename}:`, error);
-    return null;
+  if (USE_S3) {
+    // 生产环境：从 S3 读取
+    return readS3JSON<T>(filename);
+  } else {
+    // 开发环境：从本地文件读取
+    try {
+      const filePath = path.join(DATA_DIR, filename);
+      const content = await fs.readFile(filePath, 'utf-8');
+      return JSON.parse(content) as T;
+    } catch (error) {
+      console.error(`Error reading ${filename}:`, error);
+      return null;
+    }
   }
 }
 
-// 寫入 JSON 文件
+// 寫入 JSON 文件（支持本地文件系统和 S3）
 async function writeJSON<T>(filename: string, data: T): Promise<boolean> {
-  try {
-    const filePath = path.join(DATA_DIR, filename);
-    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
-    return true;
-  } catch (error) {
-    console.error(`Error writing ${filename}:`, error);
-    return false;
+  if (USE_S3) {
+    // 生产环境：写入 S3
+    return writeS3JSON(filename, data);
+  } else {
+    // 开发环境：写入本地文件
+    try {
+      const filePath = path.join(DATA_DIR, filename);
+      await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
+      return true;
+    } catch (error) {
+      console.error(`Error writing ${filename}:`, error);
+      return false;
+    }
   }
 }
 
@@ -236,4 +253,98 @@ export async function updateUserPassword(account: string, hashedPassword: string
 
   users[userIndex].password = hashedPassword;
   return writeJSON('user.json', users);
+}
+
+// Contact Messages 操作
+// 每个联系表单存储为独立的 JSON 文件: contacts/YYYY-MM-DD-{uuid}.json
+export async function createContactMessage(data: Omit<ContactMessage, 'id' | 'createdAt' | 'status'>): Promise<ContactMessage> {
+  const id = uuidv4();
+  const createdAt = new Date().toISOString();
+  const contact: ContactMessage = {
+    id,
+    createdAt,
+    status: 'pending',
+    ...data,
+  };
+
+  // 文件名: contacts/2025-01-15-abc123.json
+  const date = createdAt.split('T')[0]; // YYYY-MM-DD
+  const filename = `contacts/${date}-${id}.json`;
+
+  await writeJSON(filename, contact);
+  return contact;
+}
+
+export async function getContactMessages(): Promise<ContactMessage[]> {
+  try {
+    // 列出所有联系表单文件
+    const files = await listJSON('contacts/');
+
+    // 读取所有文件
+    const messages = await Promise.all(
+      files.map(async (file) => {
+        const data = await readJSON<ContactMessage>(file);
+        return data;
+      })
+    );
+
+    // 过滤 null 值并按时间倒序排序
+    return messages
+      .filter((m): m is ContactMessage => m !== null)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  } catch (error) {
+    console.error('Error getting contact messages:', error);
+    return [];
+  }
+}
+
+export async function getContactMessageById(id: string): Promise<ContactMessage | null> {
+  try {
+    // 查找包含该 ID 的文件
+    const files = await listJSON('contacts/');
+    const targetFile = files.find(f => f.includes(id));
+
+    if (!targetFile) {
+      return null;
+    }
+
+    return readJSON<ContactMessage>(targetFile);
+  } catch (error) {
+    console.error(`Error getting contact message ${id}:`, error);
+    return null;
+  }
+}
+
+export async function updateContactMessage(id: string, updates: Partial<ContactMessage>): Promise<boolean> {
+  try {
+    const contact = await getContactMessageById(id);
+    if (!contact) return false;
+
+    const updated = { ...contact, ...updates };
+
+    // 保持原文件名
+    const date = contact.createdAt.split('T')[0];
+    const filename = `contacts/${date}-${id}.json`;
+
+    return writeJSON(filename, updated);
+  } catch (error) {
+    console.error(`Error updating contact message ${id}:`, error);
+    return false;
+  }
+}
+
+export async function deleteContactMessage(id: string): Promise<boolean> {
+  try {
+    const files = await listJSON('contacts/');
+    const targetFile = files.find(f => f.includes(id));
+
+    if (!targetFile) {
+      return false;
+    }
+
+    return deleteJSON(targetFile);
+  } catch (error) {
+    console.error(`Error deleting contact message ${id}:`, error);
+    return false;
+  }
 }

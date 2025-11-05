@@ -1,45 +1,92 @@
-import {
-  createContactAPI,
-  DefaultEmailTemplate,
-  createCaptchaVerifier
-} from '@repo/api-template';
+import { NextRequest, NextResponse } from 'next/server';
 import { createAWSEmailService } from '@/lib/email/aws-ses';
-import { createMemoryCaptchaStore } from '@/lib/captcha/memory-store';
+import { DefaultEmailTemplate } from '@repo/api-template';
+import { createContactMessage } from '@/lib/data/db';
 
-// AWS SES 郵件服務
+// AWS SES 邮件服务
 const emailService = createAWSEmailService();
 
-// 郵件設定
-const emailConfig = {
-  subject: '建林工業 - 新的聯絡表單訊息'
-};
-
-// 郵件模板（使用建林工業的品牌色）
+// 邮件模板
 const templateGenerator = new DefaultEmailTemplate(
   '建林工業股份有限公司',
-  undefined, // Logo URL（可選）
-  '#2563eb'  // 建林工業主色調（藍色）
+  undefined,
+  '#2563eb'
 );
 
-// 驗證碼驗證服務（使用 Memory Store - 零依賴）
-const captchaStore = createMemoryCaptchaStore();
-const captchaService = createCaptchaVerifier(captchaStore);
-
-// 收件人列表（從環境變數讀取）
+// 收件人列表
 const receivers = process.env.CONTACT_EMAIL_RECEIVERS?.split(',') || [];
 
-if (receivers.length === 0) {
-  console.warn('CONTACT_EMAIL_RECEIVERS not configured. Contact form will not work properly.');
+/**
+ * POST /api/contact
+ * 处理联系表单提交
+ * 1. 验证表单数据
+ * 2. 保存到 S3
+ * 3. 发送邮件通知
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const formData = await request.json();
+
+    // 验证必要字段
+    if (!formData.name || !formData.email || !formData.message) {
+      return NextResponse.json(
+        { error: 'MISSING_FIELDS', message: '请填写姓名、Email 和消息' },
+        { status: 400 }
+      );
+    }
+
+    // 验证 Email 格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      return NextResponse.json(
+        { error: 'INVALID_EMAIL', message: 'Email 格式不正确' },
+        { status: 400 }
+      );
+    }
+
+    // 1. 保存联系表单到 S3
+    const contact = await createContactMessage({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      category: formData.category,
+      subject: formData.subject,
+      message: formData.message,
+    });
+
+    console.log(`[Contact] Saved message ${contact.id} to S3`);
+
+    // 2. 发送邮件通知 (如果配置了收件人)
+    if (receivers.length > 0) {
+      const htmlContent = templateGenerator.generateHTML(formData);
+
+      const emailResult = await emailService.send({
+        to: receivers,
+        subject: '建林工業 - 新的联系表单消息',
+        body: htmlContent,
+      });
+
+      if (!emailResult.success) {
+        console.error('[Contact] Email send failed:', emailResult.error);
+        // 邮件失败不影响表单保存,只记录错误
+      } else {
+        console.log(`[Contact] Email sent successfully to ${receivers.join(', ')}`);
+      }
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: '感谢您的联系,我们会尽快回复',
+        contactId: contact.id,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('[Contact] Error:', error);
+    return NextResponse.json(
+      { error: 'INTERNAL_ERROR', message: '系统错误,请稍后再试' },
+      { status: 500 }
+    );
+  }
 }
-
-// 建立聯絡表單 API
-const api = createContactAPI(
-  emailService,
-  emailConfig,
-  templateGenerator,
-  captchaService, // 使用驗證碼驗證
-  receivers
-);
-
-// 匯出 POST 方法
-export const POST = api.POST;

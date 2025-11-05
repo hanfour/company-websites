@@ -163,6 +163,22 @@ export interface User {
   password: string; // bcrypt hashed
 }
 
+// 聯絡表單
+export interface ContactMessage {
+  id: string;                  // 唯一識別碼 (UUID)
+  createdAt: string;           // 提交時間 (ISO 8601)
+  status: 'pending' | 'replied' | 'archived';  // 狀態
+  name: string;                // 姓名
+  email: string;               // Email
+  phone?: string;              // 電話
+  category?: string;           // 分類
+  subject?: string;            // 主旨
+  message: string;             // 訊息內容
+  adminReply?: string;         // 管理員回覆
+  repliedAt?: string;          // 回覆時間
+  repliedBy?: string;          // 回覆人員
+}
+
 // API Response
 export interface ApiResponse<T = any> {
   message: 'SUCCESS' | 'ERROR';

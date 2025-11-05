@@ -13,7 +13,8 @@
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "e2e": "cypress run",
-    "e2e:open": "cypress open"
+    "e2e:open": "cypress open",
+    "migrate:s3": "tsx scripts/migrate-to-s3.ts"
   },
   "dependencies": {
     "@repo/api-template": "*",
@@ -67,6 +68,7 @@
     "google-spreadsheet": "^5.0.2",
     "happy-dom": "^20.0.10",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5",
     "vitest": "^4.0.6"
   }
