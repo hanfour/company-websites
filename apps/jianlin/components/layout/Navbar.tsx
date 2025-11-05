@@ -141,8 +141,8 @@ export default function Navbar() {
       <div
         className={`${
           collapsed
-            ? 'w-full mx-auto fixed top-0 bg-[#f8f9fa] z-[9998]'
-            : 'w-full mx-auto fixed top-0 bg-[#f8f9fa] z-[9998] invisible'
+            ? 'w-full mx-auto sticky top-0 bg-[#f8f9fa] z-[9998]'
+            : 'w-full mx-auto sticky top-0 bg-[#f8f9fa] z-[9998] invisible'
         }`}
       >
         <div className="max-w-[91.666667%] mx-auto px-0">
