@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import emailjs from '@emailjs/browser';
 
 export default function Reservation() {
   const params = useParams();
@@ -40,23 +39,27 @@ export default function Reservation() {
     setSubmitStatus('idle');
 
     try {
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '';
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
-      const userId = process.env.NEXT_PUBLIC_EMAILJS_USER_ID || '';
-
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
+      // 调用后端 API (使用 AWS SES)
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
           phone: formData.phone,
           category: formData.category,
-          subject: formData.subject,
+          subject: `[预约赏屋 - ${projectName}] ${formData.subject}`,
           message: formData.message,
-        },
-        userId
-      );
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || '发送失败');
+      }
 
       setSubmitStatus('success');
       setFormData({
