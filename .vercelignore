@@ -1,0 +1,2 @@
+# Force Vercel to use root directory configuration
+!vercel.json
