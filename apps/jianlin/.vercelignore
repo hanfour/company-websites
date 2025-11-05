@@ -1,0 +1,10 @@
+# Test files and configuration
+vitest.setup.ts
+vitest.config.ts
+__tests__/
+cypress/
+cypress.config.ts
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
