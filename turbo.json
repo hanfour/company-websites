@@ -1,6 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "API_GATEWAY_URL",
+    "API_GATEWAY_API_KEY",
+    "CONTACT_EMAIL_RECEIVERS",
+    "JWT_SECRET",
+    "AWS_S3_BUCKET",
+    "AWS_S3_REGION",
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_S3_PREFIX",
+    "NEXT_PUBLIC_CDN_LINK",
+    "NEXT_PUBLIC_SITE_NAME",
+    "NEXT_PUBLIC_GA_ID",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "SENTRY_AUTH_TOKEN",
+    "NODE_ENV"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
