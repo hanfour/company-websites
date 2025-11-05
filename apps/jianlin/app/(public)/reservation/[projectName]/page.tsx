@@ -50,7 +50,7 @@ export default function Reservation() {
           email: formData.email,
           phone: formData.phone,
           category: formData.category,
-          subject: `[预约赏屋 - ${projectName}] ${formData.subject}`,
+          subject: `[預約賞屋 - ${projectName}] ${formData.subject}`,
           message: formData.message,
         }),
       });
@@ -58,7 +58,7 @@ export default function Reservation() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || '发送失败');
+        throw new Error(result.message || '發送失敗');
       }
 
       setSubmitStatus('success');
