@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdmin } from '@/lib/auth/auth';
+import { getCurrentUser } from '@/lib/auth/auth';
 import { getContactMessages } from '@/lib/data/db';
 
 /**
@@ -9,8 +9,8 @@ import { getContactMessages } from '@/lib/data/db';
 export async function GET(request: NextRequest) {
   try {
     // 检查权限
-    const admin = await isAdmin();
-    if (!admin) {
+    const user = await getCurrentUser();
+    if (!user || user.type !== 1) {
       return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 

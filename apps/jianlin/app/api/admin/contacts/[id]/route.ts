@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdmin } from '@/lib/auth/auth';
+import { getCurrentUser } from '@/lib/auth/auth';
 import { getContactMessageById, updateContactMessage, deleteContactMessage } from '@/lib/data/db';
 
 /**
@@ -12,8 +12,8 @@ export async function GET(
 ) {
   try {
     // 检查权限
-    const admin = await isAdmin();
-    if (!admin) {
+    const user = await getCurrentUser();
+    if (!user || user.type !== 1) {
       return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 
@@ -50,8 +50,8 @@ export async function PATCH(
 ) {
   try {
     // 检查权限
-    const admin = await isAdmin();
-    if (!admin) {
+    const user = await getCurrentUser();
+    if (!user || user.type !== 1) {
       return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 
@@ -61,7 +61,7 @@ export async function PATCH(
     // 如果更新为已回复状态,记录回复时间和回复人
     if (updates.status === 'replied' && updates.adminReply) {
       updates.repliedAt = new Date().toISOString();
-      updates.repliedBy = admin.account;
+      updates.repliedBy = user.account;
     }
 
     const success = await updateContactMessage(id, updates);
@@ -99,8 +99,8 @@ export async function DELETE(
 ) {
   try {
     // 检查权限
-    const admin = await isAdmin();
-    if (!admin) {
+    const user = await getCurrentUser();
+    if (!user || user.type !== 1) {
       return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 
