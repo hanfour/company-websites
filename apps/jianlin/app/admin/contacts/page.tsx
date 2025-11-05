@@ -10,7 +10,7 @@ export default function AdminContacts() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'pending' | 'replied' | 'archived'>('all');
 
-  // 加载联系表单列表
+  // 載入聯絡表單列表
   useEffect(() => {
     loadContacts();
   }, [filter]);
@@ -26,14 +26,14 @@ export default function AdminContacts() {
           router.push('/admin/login');
           return;
         }
-        throw new Error('加载失败');
+        throw new Error('載入失敗');
       }
 
       const result = await response.json();
       setContacts(result.data || []);
     } catch (error) {
       console.error('Load contacts error:', error);
-      alert('加载联系表单失败');
+      alert('載入聯絡表單失敗');
     } finally {
       setLoading(false);
     }
@@ -46,9 +46,9 @@ export default function AdminContacts() {
       archived: 'bg-gray-100 text-gray-800',
     };
     const labels = {
-      pending: '待处理',
-      replied: '已回复',
-      archived: '已归档',
+      pending: '待處理',
+      replied: '已回覆',
+      archived: '已歸檔',
     };
     return (
       <span className={`px-2 py-1 text-xs rounded ${styles[status as keyof typeof styles]}`}>
