@@ -70,7 +70,7 @@ export default function Navbar() {
 
             {/* Logo 中央顯示 */}
             <div className="flex justify-center py-5">
-              <div className="w-full max-w-[350px] text-center mx-auto">
+              <div className="w-full max-w-[33vw] md:max-w-[350px] text-center mx-auto">
                 <Image
                   src="/logo331x219.png"
                   alt="建林工業"
@@ -83,7 +83,7 @@ export default function Navbar() {
 
             {/* 選單連結 */}
             <div className="flex justify-center pt-3 md:pt-5">
-              <div className="w-full max-w-[350px] flex justify-between items-start mx-auto">
+              <div className="w-full max-w-[350px] flex justify-center md:justify-between items-start mx-auto gap-[0.5em] md:gap-0">
                 <Link
                   href="/about_us"
                   className="writing-mode-vertical-rl tracking-[0.5em] flex justify-center items-center text-[#f8f9fa] hover:text-gray-200 transition-colors"
