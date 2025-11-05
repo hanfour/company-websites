@@ -8,7 +8,7 @@ import { getContactMessageById, updateContactMessage, deleteContactMessage } fro
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 检查权限
@@ -17,7 +17,8 @@ export async function GET(
       return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 
-    const contact = await getContactMessageById(params.id);
+    const { id } = await params;
+    const contact = await getContactMessageById(id);
 
     if (!contact) {
       return NextResponse.json(
@@ -45,7 +46,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 检查权限
@@ -54,6 +55,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 
+    const { id } = await params;
     const updates = await request.json();
 
     // 如果更新为已回复状态,记录回复时间和回复人
@@ -62,7 +64,7 @@ export async function PATCH(
       updates.repliedBy = admin.account;
     }
 
-    const success = await updateContactMessage(params.id, updates);
+    const success = await updateContactMessage(id, updates);
 
     if (!success) {
       return NextResponse.json(
@@ -72,7 +74,7 @@ export async function PATCH(
     }
 
     // 返回更新后的数据
-    const updated = await getContactMessageById(params.id);
+    const updated = await getContactMessageById(id);
 
     return NextResponse.json({
       success: true,
@@ -93,7 +95,7 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 检查权限
@@ -102,7 +104,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
     }
 
-    const success = await deleteContactMessage(params.id);
+    const { id } = await params;
+    const success = await deleteContactMessage(id);
 
     if (!success) {
       return NextResponse.json(
