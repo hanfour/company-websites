@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd /vercel/path0 && turbo run build --filter=jianlin",
+  "buildCommand": "turbo run build --filter=jianlin",
   "outputDirectory": "apps/jianlin/.next",
-  "installCommand": "npm install",
-  "framework": null
+  "installCommand": "npm install"
 }
