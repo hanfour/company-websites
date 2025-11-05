@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import emailjs from '@emailjs/browser';
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -28,21 +27,26 @@ export default function ContactUs() {
     setSubmitStatus('idle');
 
     try {
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '';
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
-      const userId = process.env.NEXT_PUBLIC_EMAILJS_USER_ID || '';
-
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone,
-          message: formData.message,
+      // 调用后端 API (使用 AWS SES)
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        userId
-      );
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: `[${formData.category}] ${formData.subject}`,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || '发送失败');
+      }
 
       setSubmitStatus('success');
       setFormData({ name: '', phone: '', email: '', category: '-- 其他 --', subject: '', message: '' });
