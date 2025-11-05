@@ -17,11 +17,9 @@ export function createAWSEmailService(): AWSEmailService {
   return {
     async send(data) {
       try {
-        // 開發環境：允許自簽憑證（用於測試過期的 SSL 憑證）
-        // 生產環境：正常驗證 SSL 憑證
-        const httpsAgent = process.env.NODE_ENV === 'development'
-          ? new https.Agent({ rejectUnauthorized: false })
-          : undefined;
+        // 暫時解決方案：跳過 SSL 憑證驗證（因為 api.miilink.net 憑證已過期）
+        // TODO: 更新 api.miilink.net 的 SSL 憑證後移除此 workaround
+        const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
         if (httpsAgent) {
           console.log('[AWS SES] Development mode: Disabling SSL certificate verification');
