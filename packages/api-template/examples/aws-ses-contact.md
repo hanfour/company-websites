@@ -28,11 +28,11 @@ Amazon SES
 
 ```env
 # AWS API Gateway 設定（注意：不要用 VITE_ 前綴！）
-API_GATEWAY_URL=https://api.miilink.net/send
-API_GATEWAY_API_KEY=n7FONnwwQ46nvSkJzdCf05kPmiGx647r6gA1Z09Q
+API_GATEWAY_URL=https://your-api-gateway-url.amazonaws.com/send
+API_GATEWAY_API_KEY=your-api-gateway-key-here
 
 # 聯絡表單收件人（可以是多個，用逗號分隔）
-CONTACT_EMAIL_RECEIVERS=sales@jianlin.com.tw,info@jianlin.com.tw
+CONTACT_EMAIL_RECEIVERS=your-email@example.com
 
 # Vercel KV (Redis) - 用於驗證碼儲存
 # 在 Vercel Dashboard 建立 KV 存儲後會自動注入這些變數

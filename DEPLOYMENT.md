@@ -72,9 +72,9 @@ company-websites/
 
 4. 環境變數：
    ```
-   API_GATEWAY_URL=https://api.miilink.net/send
-   API_GATEWAY_API_KEY=5drBm3kJgf6LvPsAbFtE96Wf8BeXsZzk3H4lZhBP
-   CONTACT_EMAIL_RECEIVERS=info@jianlin.com.tw
+   API_GATEWAY_URL=https://your-api-gateway-url.amazonaws.com/send
+   API_GATEWAY_API_KEY=your-api-gateway-key-here
+   CONTACT_EMAIL_RECEIVERS=your-email@example.com
    ```
 
 #### 2. 設定自訂網域
