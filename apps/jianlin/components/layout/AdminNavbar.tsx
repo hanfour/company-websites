@@ -15,12 +15,13 @@ export default function AdminNavbar() {
   };
 
   const navItems = [
-    { href: '/admin/account', label: '修改登入密碼' },
-    { href: '/admin/home', label: '官網首頁管理' },
-    { href: '/admin/about', label: '關於建林管理' },
-    { href: '/admin/hot_list', label: '熱銷個案管理' },
-    { href: '/admin/history_list', label: '歷年個案管理' },
-    { href: '/admin/real_estate_list', label: '不動產租售管理' },
+    { href: '/admin/account', label: '修改密碼' },
+    { href: '/admin/contacts', label: '聯絡表單' },
+    { href: '/admin/home', label: '官網首頁' },
+    { href: '/admin/about', label: '關於建林' },
+    { href: '/admin/hot_list', label: '熱銷個案' },
+    { href: '/admin/history_list', label: '歷年個案' },
+    { href: '/admin/real_estate_list', label: '不動產租售' },
   ];
 
   return (

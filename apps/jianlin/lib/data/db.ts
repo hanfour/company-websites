@@ -36,6 +36,9 @@ async function writeJSON<T>(filename: string, data: T): Promise<boolean> {
     // 开发环境：写入本地文件
     try {
       const filePath = path.join(DATA_DIR, filename);
+      // 確保目錄存在
+      const dir = path.dirname(filePath);
+      await fs.mkdir(dir, { recursive: true });
       await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
       return true;
     } catch (error) {

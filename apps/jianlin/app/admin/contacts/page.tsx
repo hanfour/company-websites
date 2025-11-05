@@ -72,8 +72,8 @@ export default function AdminContacts() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">联系表单管理</h1>
-          <p className="text-gray-600">查看和管理客户联系表单</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">聯絡表單管理</h1>
+          <p className="text-gray-600">查看和管理客戶聯絡表單</p>
         </div>
 
         {/* Filter Tabs */}
@@ -81,9 +81,9 @@ export default function AdminContacts() {
           <nav className="-mb-px flex space-x-8">
             {[
               { key: 'all', label: '全部' },
-              { key: 'pending', label: '待处理' },
-              { key: 'replied', label: '已回复' },
-              { key: 'archived', label: '已归档' },
+              { key: 'pending', label: '待處理' },
+              { key: 'replied', label: '已回覆' },
+              { key: 'archived', label: '已完成' },
             ].map(tab => (
               <button
                 key={tab.key}
@@ -111,14 +111,14 @@ export default function AdminContacts() {
         {loading && (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600">加载中...</p>
+            <p className="mt-2 text-gray-600">讀取中...</p>
           </div>
         )}
 
         {/* Empty State */}
         {!loading && contacts.length === 0 && (
           <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-            <p className="text-gray-500">暂无联系表单</p>
+            <p className="text-gray-500">暫無聯絡表單</p>
           </div>
         )}
 
@@ -129,7 +129,7 @@ export default function AdminContacts() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    状态
+                    狀態
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     姓名
@@ -138,10 +138,10 @@ export default function AdminContacts() {
                     Email
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    分类
+                    分類
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    提交时间
+                    提交時間
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     操作
@@ -171,7 +171,7 @@ export default function AdminContacts() {
                         onClick={() => router.push(`/admin/contacts/${contact.id}`)}
                         className="text-blue-600 hover:text-blue-900"
                       >
-                        查看详情
+                        查看詳情
                       </button>
                     </td>
                   </tr>
@@ -184,7 +184,7 @@ export default function AdminContacts() {
         {/* Stats */}
         {!loading && contacts.length > 0 && (
           <div className="mt-4 text-sm text-gray-500">
-            共 {contacts.length} 条记录
+            共 {contacts.length} 條紀錄
           </div>
         )}
       </div>
