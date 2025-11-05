@@ -1,2 +1,13 @@
-# Force Vercel to use root directory configuration
+# Exclude test files from jianlin app
+apps/jianlin/vitest.setup.ts
+apps/jianlin/vitest.config.ts
+apps/jianlin/__tests__/
+apps/jianlin/cypress/
+apps/jianlin/cypress.config.ts
+apps/jianlin/*.test.ts
+apps/jianlin/*.test.tsx
+apps/jianlin/*.spec.ts
+apps/jianlin/*.spec.tsx
+
+# Keep root vercel.json
 !vercel.json
