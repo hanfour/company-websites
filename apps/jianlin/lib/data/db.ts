@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { unstable_noStore as noStore } from 'next/cache';
 import type { Company, CaseItem, RentalItem, User, CarouselItem, HomeContentItem, AboutItem, ContactMessage } from '@/types';
 import { readJSON as readS3JSON, writeJSON as writeS3JSON, listJSON, deleteJSON } from './s3-storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -50,6 +51,7 @@ async function writeJSON<T>(filename: string, data: T): Promise<boolean> {
 
 // Company 操作
 export async function getCompany(): Promise<Company | null> {
+  noStore(); // 禁用快取，確保每次都從 S3 讀取最新資料
   return readJSON<Company>('company.json');
 }
 
@@ -61,6 +63,7 @@ export async function updateCompany(data: Partial<Company>): Promise<boolean> {
 
 // Cases 操作
 export async function getCases(): Promise<CaseItem[]> {
+  noStore(); // 禁用快取，確保每次都從 S3 讀取最新資料
   const data = await readJSON<CaseItem[]>('case.json');
   return data || [];
 }
@@ -93,6 +96,7 @@ export async function deleteCase(numberID: string): Promise<boolean> {
 
 // Rentals 操作
 export async function getRentals(): Promise<RentalItem[]> {
+  noStore(); // 禁用快取，確保每次都從 S3 讀取最新資料
   const data = await readJSON<RentalItem[]>('rental.json');
   return data || [];
 }
