@@ -1,0 +1,20 @@
+# robots.txt for 建林工業股份有限公司
+# https://www.jianlin.com.tw
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://www.jianlin.com.tw/sitemap.xml
+
+# 搜尋引擎特定規則
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

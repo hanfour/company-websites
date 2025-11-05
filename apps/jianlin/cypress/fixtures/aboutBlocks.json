@@ -1,0 +1,84 @@
+{
+  "textOnly": {
+    "id": "test_block_text_only",
+    "order": 0,
+    "show": true,
+    "title": "純文字測試區塊",
+    "caption": "<p>這是一個純文字區塊的測試內容。</p><p>包含多個段落。</p>",
+    "layoutTemplate": "text-only"
+  },
+  "textWithTopImage": {
+    "id": "test_block_top_image",
+    "order": 1,
+    "show": true,
+    "title": "上圖下文測試區塊",
+    "caption": "<p>這是上圖下文佈局的測試內容。</p>",
+    "src": "images/test-top.jpg",
+    "location": "https://example.com/test-top.jpg",
+    "layoutTemplate": "text-with-top-image"
+  },
+  "textWithLeftImage": {
+    "id": "test_block_left_image",
+    "order": 2,
+    "show": true,
+    "title": "左圖右文測試區塊",
+    "caption": "<p>這是左圖右文佈局的測試內容。</p>",
+    "src": "images/test-left.jpg",
+    "location": "https://example.com/test-left.jpg",
+    "layoutTemplate": "text-with-left-image"
+  },
+  "textWithRightImage": {
+    "id": "test_block_right_image",
+    "order": 3,
+    "show": true,
+    "title": "右圖左文測試區塊",
+    "caption": "<p>這是右圖左文佈局的測試內容。</p>",
+    "src": "images/test-right.jpg",
+    "location": "https://example.com/test-right.jpg",
+    "layoutTemplate": "text-with-right-image"
+  },
+  "imageOnly": {
+    "id": "test_block_image_only",
+    "order": 4,
+    "show": true,
+    "title": "純圖片區塊標題",
+    "src": "images/test-image.jpg",
+    "location": "https://example.com/test-image.jpg",
+    "layoutTemplate": "image-only"
+  },
+  "hiddenBlock": {
+    "id": "test_block_hidden",
+    "order": 5,
+    "show": false,
+    "title": "隱藏的測試區塊",
+    "caption": "<p>這個區塊應該被隱藏。</p>",
+    "layoutTemplate": "text-only"
+  },
+  "allBlocks": [
+    {
+      "id": "test_block_1",
+      "order": 0,
+      "show": true,
+      "title": "測試區塊 1",
+      "caption": "<p>測試內容 1</p>",
+      "layoutTemplate": "text-only"
+    },
+    {
+      "id": "test_block_2",
+      "order": 1,
+      "show": true,
+      "title": "測試區塊 2",
+      "caption": "<p>測試內容 2</p>",
+      "src": "images/test2.jpg",
+      "layoutTemplate": "text-with-top-image"
+    },
+    {
+      "id": "test_block_3",
+      "order": 2,
+      "show": false,
+      "title": "測試區塊 3 (隱藏)",
+      "caption": "<p>測試內容 3</p>",
+      "layoutTemplate": "text-only"
+    }
+  ]
+}

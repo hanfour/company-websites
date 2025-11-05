@@ -1,0 +1,10 @@
+[
+  {
+    "account": "admin",
+    "password": "$2b$10$vPeXshoZXr42b8jh17i.Z.Ik2.tHyklAowpbxEVJB08zsXLEGq0la"
+  },
+  {
+    "account": "developer",
+    "password": "$2b$10$LZnVOWQ.66Katil3TJRTUOaNoe7ubgl4QAG4R9CcesrzvCoSZ3Kzm"
+  }
+]

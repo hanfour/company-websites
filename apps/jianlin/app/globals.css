@@ -1,0 +1,724 @@
+@import "tailwindcss";
+
+:root {
+  --main-color: #00638F;
+  --gray-light: #FCFCFC;
+  --gray: #6c757d;
+}
+
+@theme inline {
+  --color-main: var(--main-color);
+  --color-gray-light: var(--gray-light);
+  --color-gray: var(--gray);
+}
+
+*,
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: always;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  -ms-overflow-style: none;
+  background: #ffffff;
+  color: #000000;
+}
+
+/* 禁用右鍵菜單 */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 重置連結樣式 */
+a,
+a:focus,
+a:hover {
+  text-decoration: none;
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* 重置按鈕和輸入框樣式 */
+button,
+button:hover,
+button:focus,
+button:active:focus,
+input,
+input:focus,
+select,
+select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* 自定義工具類 */
+.writing-mode-vertical-rl {
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  -webkit-text-orientation: upright;
+  text-orientation: upright;
+}
+
+.bg-fluid {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-color: var(--gray-light);
+}
+
+.bg-fluid-contain {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-color: var(--gray-light);
+}
+
+.text-shadow-white {
+  text-shadow: 0px 0px 5px var(--gray-light),
+               0px 0px 5px var(--gray-light),
+               0px 0px 5px var(--gray-light),
+               0px 0px 5px var(--gray-light);
+}
+
+.text-shadow-black {
+  text-shadow: 0px 0px 5px rgba(0,0,0,.33),
+               0px 0px 5px rgba(0,0,0,.33),
+               0px 0px 5px rgba(0,0,0,.33),
+               0px 0px 5px rgba(0,0,0,.33);
+}
+
+/* 文章內容樣式 */
+.text-content img {
+  width: 100%;
+  height: auto;
+}
+
+.text-content h2 {
+  color: #6c757d;
+  font-weight: bold;
+}
+
+.text-content p,
+.text-content pre {
+  color: #6c757d;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+  margin: 0;
+  line-height: 1.625;
+}
+
+/* Hover 效果 */
+.hover-bg {
+  background-color: #F5F5F5;
+  transition: all 0.35s linear;
+  cursor: pointer;
+  color: #000;
+}
+
+.hover-bg:hover {
+  color: #fff;
+  background-color: rgba(0, 99, 143, 0.9);
+}
+
+.hover-bg:hover svg {
+  fill: #fff;
+}
+
+.hover-bg:hover svg path {
+  fill: #fff;
+}
+
+.hover-bg:hover img {
+  filter: invert(1);
+}
+
+/* 漢堡選單動畫 - 完全復刻原網站 */
+#nav-button {
+  width: 45px;
+  height: 24px;
+  position: relative;
+  margin: 0;
+  cursor: pointer;
+  transform: rotate(0deg);
+  transition: 0.5s ease-in-out;
+}
+
+@media screen and (max-width: 767px) {
+  #nav-button {
+    width: 26px;
+    height: 12px;
+  }
+}
+
+#nav-button span {
+  display: block;
+  position: absolute;
+  height: 3px;
+  width: 100%;
+  background-color: var(--gray);
+  border-radius: 999rem;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: 0.25s ease-in-out;
+}
+
+/* 4條線的初始位置 */
+#nav-button span:nth-child(1) {
+  top: 0px;
+}
+
+#nav-button span:nth-child(2),
+#nav-button span:nth-child(3) {
+  top: 10.5px; /* (24px - 3px) / 2 = 10.5px，線條在中心 */
+}
+
+@media screen and (max-width: 767px) {
+  #nav-button span:nth-child(2),
+  #nav-button span:nth-child(3) {
+    top: 4.5px; /* (12px - 3px) / 2 = 4.5px */
+  }
+}
+
+#nav-button span:nth-child(4) {
+  top: 21px; /* 24px - 3px = 21px */
+}
+
+@media screen and (max-width: 767px) {
+  #nav-button span:nth-child(4) {
+    top: 9px; /* 12px - 3px = 9px */
+  }
+}
+
+/* 打開狀態 - 變成 X */
+#nav-button.open span:nth-child(1) {
+  top: 10.5px;
+  width: 0%;
+  left: 20%;
+}
+
+@media screen and (max-width: 767px) {
+  #nav-button.open span:nth-child(1) {
+    top: 4.5px;
+  }
+}
+
+#nav-button.open span:nth-child(2) {
+  transform: rotate(45deg);
+}
+
+#nav-button.open span:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+#nav-button.open span:nth-child(4) {
+  top: 10.5px;
+  width: 0%;
+  left: 50%;
+}
+
+@media screen and (max-width: 767px) {
+  #nav-button.open span:nth-child(4) {
+    top: 4.5px;
+  }
+}
+
+/* 選單覆蓋層 */
+#menu-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--main-color);
+  z-index: 9999;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+#menu-layout.open {
+  transform: translateY(0);
+}
+
+/* Menu overlay 內的漢堡按鈕（X按鈕）顏色 */
+#menu-layout #nav-button span {
+  background-color: #ffffff;
+}
+
+#menu-layout #nav-button.open span {
+  background-color: #ffffff;
+}
+
+/* 載入遮罩 */
+.loading-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* See More 按鈕樣式 */
+.btn-seeMore {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  border: 1px solid var(--gray);
+  color: var(--gray);
+  padding: 1rem 2rem;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+@media screen and (min-width: 768px) {
+  .btn-seeMore {
+    width: 50%;
+  }
+}
+
+.btn-seeMore .line-horizontal {
+  border: unset;
+  height: 0;
+  width: 0;
+  padding-right: 1rem;
+  border-bottom: 1px solid var(--gray);
+  margin-right: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-seeMore .text {
+  margin-right: auto;
+}
+
+.btn-seeMore:hover,
+.btn-seeMore:focus {
+  background-color: var(--main-color);
+  color: #ffffff;
+  border-color: var(--main-color);
+}
+
+.btn-seeMore:hover .line-horizontal,
+.btn-seeMore:focus .line-horizontal {
+  border-color: #ffffff;
+  padding-right: 3rem;
+}
+
+/* Overlay 变体 - 用于轮播图上的白色按钮 */
+.btn-seeMore-overlay {
+  min-width: 200px;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: var(--gray);
+  padding: 0.75rem 1.5rem;
+  margin: 0;
+}
+
+.btn-seeMore-overlay .line-horizontal {
+  border-color: var(--gray);
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+.btn-seeMore-overlay:hover,
+.btn-seeMore-overlay:focus {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: var(--gray);
+}
+
+.btn-seeMore-overlay:hover .line-horizontal,
+.btn-seeMore-overlay:focus .line-horizontal {
+  border-color: var(--gray);
+  padding-left: 1rem;
+  padding-right: 2rem;
+}
+
+/* Contact Us 按鈕樣式 */
+.btn-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  background-color: var(--main-color);
+  border: 2px solid var(--main-color);
+  color: #ffffff;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+@media screen and (min-width: 768px) {
+  .btn-contact {
+    font-size: 1rem;
+    padding: 1rem 2.5rem;
+  }
+}
+
+/* 背景展開動畫：從中心向上下展開 */
+.btn-contact::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.btn-contact:hover::before {
+  height: 100%;
+}
+
+.btn-contact span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-contact:hover {
+  color: var(--main-color);
+}
+
+/* Tiptap 富文本編輯器樣式 */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+}
+
+.ProseMirror h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5em;
+  margin: 1em 0;
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+}
+
+.ProseMirror li {
+  margin: 0.5em 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #ddd;
+  padding-left: 1em;
+  margin: 1em 0;
+  color: #666;
+  font-style: italic;
+}
+
+.ProseMirror hr {
+  border: none;
+  border-top: 2px solid #ddd;
+  margin: 2em 0;
+}
+
+.ProseMirror code {
+  background-color: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.ProseMirror pre {
+  background-color: #f5f5f5;
+  padding: 1em;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.ProseMirror pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.ProseMirror a {
+  color: #006989;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  color: #004a63;
+}
+
+/* 富文本內容樣式 (Prose) */
+.prose {
+  color: #374151;
+  line-height: 1.75;
+}
+
+.prose ul,
+.prose ol {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+  list-style-position: outside;
+}
+
+.prose ul {
+  list-style-type: disc !important;
+  display: block !important;
+}
+
+.prose ol {
+  list-style-type: decimal !important;
+  display: block !important;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  display: list-item !important;
+}
+
+.prose li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  display: inline;
+}
+
+.prose p {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: #111827;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+.prose h1 {
+  font-size: 2.25em;
+}
+
+.prose h2 {
+  font-size: 1.875em;
+}
+
+.prose h3 {
+  font-size: 1.5em;
+}
+
+.prose h4 {
+  font-size: 1.25em;
+}
+
+.prose strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.prose a {
+  color: var(--main-color);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.prose a:hover {
+  color: #004a63;
+}
+
+.prose blockquote {
+  font-style: italic;
+  border-left: 4px solid var(--main-color);
+  padding-left: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  color: #6b7280;
+}
+
+.prose code {
+  color: #111827;
+  background-color: #f3f4f6;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.prose pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  overflow-x: auto;
+  padding: 1em;
+  border-radius: 0.5rem;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.prose hr {
+  border-color: #e5e7eb;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.prose th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+/* YouTube 和嵌入式媒體樣式 */
+.prose iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 0.5rem;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  border: none;
+}
+
+/* ProseMirror 編輯器內的表格樣式 */
+.ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5em 0;
+  table-layout: fixed;
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid #d1d5db;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.ProseMirror th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.ProseMirror tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* ProseMirror 編輯器內的代碼塊樣式 */
+.ProseMirror pre.hljs {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+
+/* ProseMirror 圖片和 iframe */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+}
+
+.ProseMirror iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+  border: none;
+}

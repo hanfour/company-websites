@@ -1,0 +1,189 @@
+[
+  {
+    "numberID": "hot001",
+    "type": "hot",
+    "createdAt": "2025-11-03T08:21:11.200Z",
+    "updatedAt": "2025-11-03T08:21:11.201Z",
+    "id": 1,
+    "name": "新竹之昇",
+    "sub": "<p>一座跨越世紀的新竹公園， 風城三代人的共同回憶。</p><p>一個不可能被歷史遺忘的位置， 注定傳家、傳世。</p>",
+    "caption": "<p>投資興建：建林工業股份有限公司</p><p>建築設計：王銘鴻-建築師事務所</p><p>公設設計：王勝正-十邑設計</p><p>景觀設計：老圃造園</p><p>企劃銷售：海悅國際開發股份有限公司</p><p>基地位置：新竹市食品路與綠水路口</p><p>貴賓專線：(02)2522-3181 </p><p><br></p>",
+    "outline": "<p><span class=\"ql-size-large\">感謝新竹之昇已購客戶，對於本公司開發興建之建案的大力支持與愛護，再次致上十二萬分謝意。</span></p><p><span class=\"ql-size-large\">本工程進度已達第三期開工款，請於中華民國111年10月15日前，匯款至本建案專屬帳號。</span></p><p><span class=\"ql-size-large\">祝大家平安喜樂</span></p><p><span class=\"ql-size-large\">------------------</span></p><p><span class=\"ql-size-large\">新竹之昇服務專線 ☎(02)2522-3181分機227</span></p><p><span class=\"ql-size-large\">一座跨越世紀的新竹公園， 風城三代人的共同回憶。</span></p>",
+    "address": "24°48'01.9\"N 120°58'58.7\"E",
+    "slider": [
+      {
+        "name": "1.jpg",
+        "src": "images/90350254783.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/90350254783.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "2.jpg",
+        "src": "images/85114039404.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/85114039404.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "3.jpg",
+        "src": "images/55514154671.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/55514154671.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "4.jpg",
+        "src": "images/95128031814.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/95128031814.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "5.jpg",
+        "src": "images/65186471254.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/65186471254.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "1.jpg",
+        "src": "images/97820132149.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/97820132149.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "2.jpg",
+        "src": "images/12023323069.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/12023323069.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "3.jpg",
+        "src": "images/42273837205.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/42273837205.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "4.jpg",
+        "src": "images/69712409630.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/69712409630.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "5.jpg",
+        "src": "images/24427901152.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/24427901152.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "6.jpg",
+        "src": "images/35819864378.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/35819864378.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "7.jpg",
+        "src": "images/78250682005.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/78250682005.jpeg",
+        "altText": "新竹之昇示意圖"
+      },
+      {
+        "name": "8.jpg",
+        "src": "images/65311345785.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/65311345785.jpeg",
+        "altText": "新竹之昇示意圖"
+      }
+    ],
+    "src": [
+      {
+        "name": "1.jpg",
+        "src": "images/33760821837.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/33760821837.jpeg"
+      },
+      {
+        "name": "2.jpg",
+        "src": "images/65363640047.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/65363640047.jpeg"
+      },
+      {
+        "name": "3.jpg",
+        "src": "images/45821595877.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/45821595877.jpeg"
+      },
+      {
+        "name": "9.jpg",
+        "src": "images/70171382359.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/70171382359.jpeg"
+      },
+      {
+        "name": "10.jpg",
+        "src": "images/46124223359.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/46124223359.jpeg"
+      },
+      {
+        "name": "11.jpg",
+        "src": "images/29434846416.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/29434846416.jpeg"
+      },
+      {
+        "name": "12.jpg",
+        "src": "images/29576374997.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/29576374997.jpeg"
+      }
+    ],
+    "broking": "https://www.hiyes.tw/BuildingCase/Show/08758c3f-a88b-4b22-bf88-acf7d8ee2ff7",
+    "facebook": "https://www.facebook.com/HsinChu.Green.Buildin/",
+    "detailed": "https://case.hiyes.tw/hsinchuforest/index.html",
+    "status": 0,
+    "data_uploader": "9999-12-12",
+    "data_editor": "2022-09-14"
+  },
+  {
+    "numberID": "history018",
+    "type": "history",
+    "createdAt": "2025-11-03T08:21:11.201Z",
+    "updatedAt": "2025-11-03T08:21:11.201Z",
+    "id": 18,
+    "name": "時光織錦",
+    "sub": "<p><br></p>",
+    "caption": "<p>台中市北區新地標豪宅，綠園道第一排，</p><p>新古典巨構28層雙塔式建築。</p><p>黃金機能地段，一中商圈中友百貨旁、近私立明星學校育仁小學，</p><p>綠帶匯萃鬧中取靜的一流優質居住環境。</p>",
+    "outline": "<p><span style=\"background-color: rgb(252, 252, 252);\">台中市北區新地標豪宅，綠園道第一排，</span></p><p><span style=\"background-color: rgb(252, 252, 252);\">新古典巨構28層雙塔式建築。</span></p><p><span style=\"background-color: rgb(252, 252, 252);\">黃金機能地段，一中商圈中友百貨旁、近私立明星學校育仁小學，</span></p><p><span style=\"background-color: rgb(252, 252, 252);\">綠帶匯萃鬧中取靜的一流優質居住環境。</span></p>",
+    "address": "404台中市北區興進路256號",
+    "slider": [
+      {
+        "name": "about-img-lg-1.jpg",
+        "src": "images/80494300916.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/80494300916.jpeg"
+      }
+    ],
+    "src": [
+      {
+        "name": "outward1760-a3.jpg",
+        "src": "images/81266693572.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/81266693572.jpeg"
+      },
+      {
+        "name": "banquet1760.jpg",
+        "src": "images/53997127331.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/53997127331.jpeg"
+      },
+      {
+        "name": "hall960-a2.jpg",
+        "src": "images/38325488712.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/38325488712.jpeg"
+      },
+      {
+        "name": "kitchen1760.jpg",
+        "src": "images/82005659251.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/82005659251.jpeg"
+      },
+      {
+        "name": "read1760.jpg",
+        "src": "images/89164342176.jpeg",
+        "location": "https://company-assets-tw-2025.s3.ap-northeast-1.amazonaws.com/jianlin/images/89164342176.jpeg"
+      }
+    ],
+    "broking": "",
+    "facebook": "",
+    "detailed": "",
+    "status": 1,
+    "data_uploader": "2020-11-26",
+    "data_editor": "2020-12-02"
+  }
+]

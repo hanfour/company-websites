@@ -1,0 +1,19 @@
+{
+  "name": "@repo/upload-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./s3": "./lib/s3-client.ts",
+    "./presign": "./lib/presign.ts",
+    "./multipart": "./lib/multipart.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.714.0",
+    "@aws-sdk/s3-request-presigner": "^3.714.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  }
+}

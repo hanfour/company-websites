@@ -1,0 +1,29 @@
+{
+  "name": "建林工業股份有限公司",
+  "short_name": "建林工業",
+  "description": "建林工業經營超過50個年頭，早期從事磚窯廠、營造廠，在營造事業方面投入大量心血鑽研，培養出建林人毫釐必較的理性工業精神。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#00638F",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "real-estate", "construction"],
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

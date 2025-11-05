@@ -1,0 +1,66 @@
+{
+  "hotCases": [
+    {
+      "numberID": "hot001",
+      "title": "建案名称",
+      "subtitle": "建案副标题或简介",
+      "content": "<p>详细的 HTML 内容，可以包含格式化文本</p><ul><li>特点1</li><li>特点2</li></ul>",
+      "images": [
+        "/images/hot001/image1.jpg",
+        "/images/hot001/image2.jpg",
+        "/images/hot001/image3.jpg"
+      ],
+      "type": "hot",
+      "createdAt": "2025-11-03T00:00:00.000Z",
+      "updatedAt": "2025-11-03T00:00:00.000Z"
+    },
+    {
+      "numberID": "hot002",
+      "title": "另一个热销建案",
+      "subtitle": "位于市中心的优质住宅",
+      "content": "<p>这是另一个热销个案的详细说明</p>",
+      "images": [
+        "/images/hot002/main.jpg"
+      ],
+      "type": "hot",
+      "createdAt": "2025-11-02T00:00:00.000Z",
+      "updatedAt": "2025-11-03T00:00:00.000Z"
+    }
+  ],
+  "historyCases": [
+    {
+      "numberID": "history001",
+      "title": "历年经典建案",
+      "subtitle": "2020年完工的优质住宅",
+      "content": "<p>这是历年建案的详细说明</p>",
+      "images": [
+        "/images/history001/facade.jpg",
+        "/images/history001/interior.jpg"
+      ],
+      "type": "history",
+      "createdAt": "2020-01-15T00:00:00.000Z",
+      "updatedAt": "2025-11-03T00:00:00.000Z"
+    }
+  ],
+  "rentals": [
+    {
+      "numberID": "rental001",
+      "title": "出租物件名称",
+      "subtitle": "3房2厅，交通便利",
+      "content": "<p>物件详细信息：<br>- 面积：100平方米<br>- 楼层：5/10<br>- 租金：NT$30,000/月</p>",
+      "images": [
+        "/images/rental001/living-room.jpg",
+        "/images/rental001/bedroom.jpg"
+      ],
+      "createdAt": "2025-10-01T00:00:00.000Z",
+      "updatedAt": "2025-11-03T00:00:00.000Z"
+    }
+  ],
+  "_notes": {
+    "description": "这是建林地产数据的标准模板",
+    "imageFormat": "图片路径可以是相对路径或完整 URL",
+    "contentFormat": "content 字段支持 HTML 格式，可以包含富文本",
+    "numberIDPattern": "热销: hot001-hot999, 历年: history001-history999, 租售: rental001-rental999",
+    "dateFormat": "使用 ISO 8601 格式：YYYY-MM-DDTHH:mm:ss.sssZ"
+  }
+}
