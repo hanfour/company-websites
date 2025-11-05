@@ -18,7 +18,7 @@ export default async function Home() {
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto">
+    <div className="w-full max-w-[1920px] mx-auto -mt-[48px] md:-mt-[72px]">
       {/* 輪播區塊 */}
       <div className="flex w-full h-screen">
         <div className="hidden md:block w-[4.166667%]"></div>
