@@ -74,7 +74,7 @@ export default async function Home() {
                       <div className="w-full h-auto p-0 mx-auto block md:hidden mt-4">
                         <div
                           className="w-full pb-[75%] bg-fluid bg-cover bg-center"
-                          style={{ backgroundImage: `url(${getImageUrl(block.src || '', CDN_LINK)})` }}
+                          style={{ backgroundImage: `url(${block.location || getImageUrl(block.src || '', CDN_LINK)})` }}
                         />
                       </div>
                     )}

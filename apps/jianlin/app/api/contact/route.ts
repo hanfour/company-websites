@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     // 验证必要字段
     if (!formData.name || !formData.email || !formData.message) {
       return NextResponse.json(
-        { error: 'MISSING_FIELDS', message: '请填写姓名、Email 和消息' },
+        { error: 'MISSING_FIELDS', message: '請填寫姓名、Email 和訊息內容' },
         { status: 400 }
       );
     }
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
 
       const emailResult = await emailService.send({
         to: receivers,
-        subject: '建林工業 - 新的联系表单消息',
+        subject: '建林工業 - 新的聯絡表單通知',
         body: htmlContent,
       });
 
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: '感谢您的联系,我们会尽快回复',
+        message: '感謝您的聯絡，我們會盡快回覆',
         contactId: contact.id,
       },
       { status: 200 }
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[Contact] Error:', error);
     return NextResponse.json(
-      { error: 'INTERNAL_ERROR', message: '系统错误,请稍后再试' },
+      { error: 'INTERNAL_ERROR', message: '系統錯誤，請稍後再試' },
       { status: 500 }
     );
   }

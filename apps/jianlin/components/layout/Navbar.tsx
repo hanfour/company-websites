@@ -9,6 +9,28 @@ export default function Navbar() {
 
   const toggleNavbar = () => setCollapsed(!collapsed);
 
+  // 控制 body scroll 鎖定
+  useEffect(() => {
+    if (!collapsed) {
+      // 選單打開時，鎖定 body 滾動
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      // 選單關閉時，解除鎖定
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+
+    // 清理函數
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [collapsed]);
+
   // 禁用右鍵選單
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
