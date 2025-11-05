@@ -20,7 +20,7 @@ export default async function Home() {
   return (
     <div className="w-full max-w-[1920px] mx-auto">
       {/* 輪播區塊 */}
-      <div className="flex w-full h-[calc(100vh-48px)] md:h-[calc(100vh-72px)]">
+      <div className="flex w-full h-screen">
         <div className="hidden md:block w-[4.166667%]"></div>
         <div className="flex-1 h-full bg-gray-light">
           {carousel.length > 0 && <Carousel items={carousel} />}
