@@ -95,7 +95,7 @@ export default async function Home() {
                 <div className={`w-full md:w-1/2 order-1 ${isImageLeft ? 'md:order-1' : 'md:order-2'} hidden md:block`}>
                   <div
                     className="w-full h-full min-h-[500px] bg-fluid bg-cover bg-center"
-                    style={{ backgroundImage: `url(${getImageUrl(block.src || '', CDN_LINK)})` }}
+                    style={{ backgroundImage: `url(${block.location || getImageUrl(block.src || '', CDN_LINK)})` }}
                   />
                 </div>
               )}

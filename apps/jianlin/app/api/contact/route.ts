@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAWSEmailService } from '@/lib/email/aws-ses';
-import { DefaultEmailTemplate } from '@repo/api-template';
+import { DefaultEmailTemplate, createCaptchaVerifier } from '@repo/api-template';
 import { createContactMessage } from '@/lib/data/db';
+import { createMemoryCaptchaStore } from '@/lib/captcha/memory-store';
 
 // AWS SES 邮件服务
 const emailService = createAWSEmailService();
@@ -16,6 +17,10 @@ const templateGenerator = new DefaultEmailTemplate(
 // 收件人列表
 const receivers = process.env.CONTACT_EMAIL_RECEIVERS?.split(',') || [];
 
+// 驗證碼驗證器
+const captchaStore = createMemoryCaptchaStore();
+const captchaVerifier = createCaptchaVerifier(captchaStore);
+
 /**
  * POST /api/contact
  * 处理联系表单提交
@@ -26,6 +31,22 @@ const receivers = process.env.CONTACT_EMAIL_RECEIVERS?.split(',') || [];
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.json();
+
+    // 驗證驗證碼
+    if (!formData.captchaId || !formData.captcha) {
+      return NextResponse.json(
+        { error: 'MISSING_CAPTCHA', message: '請輸入驗證碼' },
+        { status: 400 }
+      );
+    }
+
+    const isValidCaptcha = await captchaVerifier.verify(formData.captchaId, formData.captcha);
+    if (!isValidCaptcha) {
+      return NextResponse.json(
+        { error: 'INVALID_CAPTCHA', message: '驗證碼錯誤或已過期' },
+        { status: 400 }
+      );
+    }
 
     // 验证必要字段
     if (!formData.name || !formData.email || !formData.message) {
