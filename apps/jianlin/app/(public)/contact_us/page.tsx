@@ -10,34 +10,25 @@ export default function ContactUs() {
     category: '-- 其他 --',
     subject: '',
     message: '',
-    captcha: '',
+    mathAnswer: '',
+    honeypot: '', // Honeypot 欄位（機器人陷阱）
   });
-  const [captchaId, setCaptchaId] = useState<string>('');
-  const [captchaCode, setCaptchaCode] = useState<string>(''); // 僅開發環境顯示
+
+  // 生成簡單數學問題
+  const [mathQuestion, setMathQuestion] = useState({ a: 0, b: 0, answer: 0 });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // 載入驗證碼
+  // 初始化數學問題
   useEffect(() => {
-    loadCaptcha();
+    generateMathQuestion();
   }, []);
 
-  const loadCaptcha = async () => {
-    try {
-      const response = await fetch('/api/captcha');
-      const data = await response.json();
-
-      if (data.success) {
-        setCaptchaId(data.captchaId);
-        // 開發環境顯示驗證碼答案
-        if (data.captchaCode) {
-          setCaptchaCode(data.captchaCode);
-        }
-      }
-    } catch (error) {
-      console.error('載入驗證碼失敗:', error);
-    }
+  const generateMathQuestion = () => {
+    const a = Math.floor(Math.random() * 10) + 1; // 1-10
+    const b = Math.floor(Math.random() * 10) + 1; // 1-10
+    setMathQuestion({ a, b, answer: a + b });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -53,8 +44,25 @@ export default function ContactUs() {
     setSubmitStatus('idle');
     setErrorMessage('');
 
+    // Honeypot 檢查（前端）
+    if (formData.honeypot) {
+      // 機器人填寫了隱藏欄位，靜默拒絕
+      setIsSubmitting(false);
+      return;
+    }
+
+    // 數學問題驗證（前端）
+    if (parseInt(formData.mathAnswer) !== mathQuestion.answer) {
+      setSubmitStatus('error');
+      setErrorMessage('數學問題答案錯誤，請重試');
+      setIsSubmitting(false);
+      generateMathQuestion(); // 重新生成問題
+      setFormData({ ...formData, mathAnswer: '' });
+      return;
+    }
+
     try {
-      // 调用后端 API (使用 AWS SES + 驗證碼)
+      // 调用后端 API (使用 AWS SES)
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -66,8 +74,9 @@ export default function ContactUs() {
           phone: formData.phone,
           subject: `[${formData.category}] ${formData.subject}`,
           message: formData.message,
-          captchaId,
-          captcha: formData.captcha,
+          honeypot: formData.honeypot,
+          mathAnswer: formData.mathAnswer,
+          mathExpected: mathQuestion.answer,
         }),
       });
 
@@ -85,18 +94,15 @@ export default function ContactUs() {
         category: '-- 其他 --',
         subject: '',
         message: '',
-        captcha: '',
+        mathAnswer: '',
+        honeypot: '',
       });
-      // 重新載入驗證碼
-      loadCaptcha();
+      // 重新生成數學問題
+      generateMathQuestion();
     } catch (error: any) {
       console.error('Email send error:', error);
       setSubmitStatus('error');
       setErrorMessage(error.message || '發送失敗，請稍後再試');
-      // 驗證碼錯誤時重新載入
-      if (error.message?.includes('驗證碼')) {
-        loadCaptcha();
-      }
     } finally {
       setIsSubmitting(false);
     }
@@ -195,33 +201,40 @@ export default function ContactUs() {
               />
             </div>
 
-            {/* 驗證碼欄位 */}
+            {/* Honeypot 欄位（機器人陷阱 - 對人類隱藏） */}
+            <input
+              type="text"
+              name="honeypot"
+              value={formData.honeypot}
+              onChange={handleChange}
+              tabIndex={-1}
+              autoComplete="off"
+              style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px' }}
+              aria-hidden="true"
+            />
+
+            {/* 數學問題驗證 */}
             <div>
+              <label htmlFor="mathAnswer" className="block text-sm text-gray-700 mb-2">
+                請回答以下問題以驗證您不是機器人：
+              </label>
               <div className="flex items-center gap-4">
-                <input
-                  type="text"
-                  id="captcha"
-                  name="captcha"
-                  value={formData.captcha}
-                  onChange={handleChange}
-                  required
-                  maxLength={4}
-                  className="flex-1 px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[var(--main-color)] focus:border-[var(--main-color)] transition-all uppercase"
-                  placeholder="請輸入驗證碼（4位數字+字母）"
-                />
-                <button
-                  type="button"
-                  onClick={loadCaptcha}
-                  className="px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-colors text-sm"
-                >
-                  重新載入
-                </button>
-              </div>
-              {captchaCode && (
-                <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 text-sm text-yellow-800">
-                  ⚠️ 開發模式：驗證碼為 <strong>{captchaCode}</strong>
+                <div className="flex-1">
+                  <div className="text-lg font-medium mb-2">
+                    {mathQuestion.a} + {mathQuestion.b} = ?
+                  </div>
+                  <input
+                    type="number"
+                    id="mathAnswer"
+                    name="mathAnswer"
+                    value={formData.mathAnswer}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[var(--main-color)] focus:border-[var(--main-color)] transition-all"
+                    placeholder="請輸入答案"
+                  />
                 </div>
-              )}
+              </div>
             </div>
 
             {/* 錯誤訊息 */}
@@ -241,7 +254,7 @@ export default function ContactUs() {
             <div className="text-center">
               <button
                 type="submit"
-                disabled={isSubmitting || !captchaId}
+                disabled={isSubmitting}
                 className="px-8 py-3 bg-[var(--main-color)] text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed min-w-[200px]"
               >
                 {isSubmitting ? '發送中...' : '送出'}
