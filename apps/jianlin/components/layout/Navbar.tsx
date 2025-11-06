@@ -6,8 +6,20 @@ import Image from 'next/image';
 
 export default function Navbar() {
   const [collapsed, setCollapsed] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleNavbar = () => setCollapsed(!collapsed);
+
+  // 監聽滾動，動態切換 fixed positioning
+  useEffect(() => {
+    const handleScroll = () => {
+      // 當滾動超過 10px 時，navbar 變成 fixed
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // 控制 body scroll 鎖定
   useEffect(() => {
@@ -141,8 +153,8 @@ export default function Navbar() {
       <div
         className={`${
           collapsed
-            ? 'w-full mx-auto sticky top-0 bg-[#f8f9fa] z-[9998]'
-            : 'w-full mx-auto sticky top-0 bg-[#f8f9fa] z-[9998] invisible'
+            ? `w-full mx-auto ${isScrolled ? 'fixed' : 'absolute'} top-0 bg-[#f8f9fa] z-[9998]`
+            : `w-full mx-auto ${isScrolled ? 'fixed' : 'absolute'} top-0 bg-[#f8f9fa] z-[9998] invisible`
         }`}
       >
         <div className="max-w-[91.666667%] mx-auto px-0">

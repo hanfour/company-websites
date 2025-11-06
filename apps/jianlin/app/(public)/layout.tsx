@@ -9,7 +9,7 @@ export default function PublicLayout({
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex-1">
+      <div className="flex-1 mt-[48px] md:mt-[72px]">
         {children}
       </div>
       <Footer />
