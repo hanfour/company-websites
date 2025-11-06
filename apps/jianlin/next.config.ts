@@ -6,6 +6,16 @@ const nextConfig: NextConfig = {
   compress: true, // Gzip 壓縮
   poweredByHeader: false, // 隱藏 X-Powered-By 標頭（安全性）
 
+  // Webpack 配置：忽略不需要的原生模組
+  webpack: (config) => {
+    config.resolve = config.resolve || {};
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      canvas: false, // 忽略 canvas 模組（來自 @repo/api-template 的 CanvasCaptchaGenerator）
+    };
+    return config;
+  },
+
   images: {
     remotePatterns: [
       {
