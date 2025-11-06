@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -10,9 +10,35 @@ export default function ContactUs() {
     category: '-- 其他 --',
     subject: '',
     message: '',
+    captcha: '',
   });
+  const [captchaId, setCaptchaId] = useState<string>('');
+  const [captchaCode, setCaptchaCode] = useState<string>(''); // 僅開發環境顯示
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // 載入驗證碼
+  useEffect(() => {
+    loadCaptcha();
+  }, []);
+
+  const loadCaptcha = async () => {
+    try {
+      const response = await fetch('/api/captcha');
+      const data = await response.json();
+
+      if (data.success) {
+        setCaptchaId(data.captchaId);
+        // 開發環境顯示驗證碼答案
+        if (data.captchaCode) {
+          setCaptchaCode(data.captchaCode);
+        }
+      }
+    } catch (error) {
+      console.error('載入驗證碼失敗:', error);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -25,9 +51,10 @@ export default function ContactUs() {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setErrorMessage('');
 
     try {
-      // 调用后端 API (使用 AWS SES)
+      // 调用后端 API (使用 AWS SES + 驗證碼)
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -39,6 +66,8 @@ export default function ContactUs() {
           phone: formData.phone,
           subject: `[${formData.category}] ${formData.subject}`,
           message: formData.message,
+          captchaId,
+          captcha: formData.captcha,
         }),
       });
 
@@ -49,10 +78,25 @@ export default function ContactUs() {
       }
 
       setSubmitStatus('success');
-      setFormData({ name: '', phone: '', email: '', category: '-- 其他 --', subject: '', message: '' });
-    } catch (error) {
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        category: '-- 其他 --',
+        subject: '',
+        message: '',
+        captcha: '',
+      });
+      // 重新載入驗證碼
+      loadCaptcha();
+    } catch (error: any) {
       console.error('Email send error:', error);
       setSubmitStatus('error');
+      setErrorMessage(error.message || '發送失敗，請稍後再試');
+      // 驗證碼錯誤時重新載入
+      if (error.message?.includes('驗證碼')) {
+        loadCaptcha();
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -105,7 +149,7 @@ export default function ContactUs() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[var(--main-color)] focus:border-[var(--main-color)] transition-all"
-                placeholder="聯絡信箱"
+                placeholder="Email"
               />
             </div>
 
@@ -117,10 +161,11 @@ export default function ContactUs() {
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[var(--main-color)] focus:border-[var(--main-color)] transition-all bg-white"
               >
-                <option value="新竹之昇">新竹之昇</option>
-                <option value="時光織錦">時光織錦</option>
-                <option value="租售相關">租售相關</option>
                 <option value="-- 其他 --">-- 其他 --</option>
+                <option value="房屋租賃">房屋租賃</option>
+                <option value="房地合建">房地合建</option>
+                <option value="土地開發">土地開發</option>
+                <option value="購屋諮詢">購屋諮詢</option>
               </select>
             </div>
 
@@ -133,7 +178,7 @@ export default function ContactUs() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[var(--main-color)] focus:border-[var(--main-color)] transition-all"
-                placeholder="洽詢主旨"
+                placeholder="主旨"
               />
             </div>
 
@@ -146,36 +191,65 @@ export default function ContactUs() {
                 required
                 rows={6}
                 className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[var(--main-color)] focus:border-[var(--main-color)] transition-all resize-none"
-                placeholder="洽詢內容"
+                placeholder="訊息內容"
               />
             </div>
 
-            {/* 提交按鈕 */}
+            {/* 驗證碼欄位 */}
+            <div>
+              <div className="flex items-center gap-4">
+                <input
+                  type="text"
+                  id="captcha"
+                  name="captcha"
+                  value={formData.captcha}
+                  onChange={handleChange}
+                  required
+                  maxLength={4}
+                  className="flex-1 px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[var(--main-color)] focus:border-[var(--main-color)] transition-all uppercase"
+                  placeholder="請輸入驗證碼（4位數字+字母）"
+                />
+                <button
+                  type="button"
+                  onClick={loadCaptcha}
+                  className="px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-300 transition-colors text-sm"
+                >
+                  重新載入
+                </button>
+              </div>
+              {captchaCode && (
+                <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 text-sm text-yellow-800">
+                  ⚠️ 開發模式：驗證碼為 <strong>{captchaCode}</strong>
+                </div>
+              )}
+            </div>
+
+            {/* 錯誤訊息 */}
+            {submitStatus === 'error' && errorMessage && (
+              <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm">
+                {errorMessage}
+              </div>
+            )}
+
+            {/* 成功訊息 */}
+            {submitStatus === 'success' && (
+              <div className="p-4 bg-green-50 border border-green-200 text-green-700 text-sm">
+                感謝您的聯絡，我們會盡快回覆！
+              </div>
+            )}
+
             <div className="text-center">
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="inline-flex items-center justify-center px-12 py-4 bg-[var(--main-color)] text-white text-lg font-medium hover:bg-opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSubmitting || !captchaId}
+                className="px-8 py-3 bg-[var(--main-color)] text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed min-w-[200px]"
               >
-                {isSubmitting ? '傳送中...' : 'SUBMIT'}
+                {isSubmitting ? '發送中...' : '送出'}
               </button>
             </div>
-
-            {/* 狀態訊息 */}
-            {submitStatus === 'success' && (
-              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 text-center">
-                感謝您的來信！我們將盡快回覆您。
-              </div>
-            )}
-            {submitStatus === 'error' && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 text-center">
-                發送失敗，請稍後再試或直接撥打電話聯繫我們。
-              </div>
-            )}
           </form>
         </div>
       </div>
-
     </div>
   );
 }
