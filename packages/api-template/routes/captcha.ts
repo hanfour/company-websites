@@ -160,66 +160,18 @@ export function createCaptchaVerifier(store: CaptchaStore) {
 /**
  * Canvas 驗證碼圖片生成器（適用於 Node.js 環境）
  *
- * 注意：需要安裝 canvas 套件
- * npm install canvas
+ * ⚠️ 已棄用：此類別需要 canvas 原生模組，在 Serverless 環境中不可用
+ * 建議使用第三方圖片驗證碼服務（如 Google reCAPTCHA, hCaptcha）
+ * 或使用數學問題 + Honeypot 等替代方案
  *
- * 在 Vercel 上需要使用 @vercel/node 並配置 next.config.js
+ * @deprecated Use math questions or third-party CAPTCHA services instead
  */
 export class CanvasCaptchaGenerator extends DefaultCaptchaGenerator {
   generateImage(code: string, width: number = 100, height: number = 50): string {
-    try {
-      // 動態載入 canvas（避免在不支援的環境中報錯）
-      const { createCanvas } = require('canvas');
-      const canvas = createCanvas(width, height);
-      const ctx = canvas.getContext('2d');
-
-      // 背景
-      ctx.fillStyle = '#f0f0f0';
-      ctx.fillRect(0, 0, width, height);
-
-      // 干擾線
-      for (let i = 0; i < 5; i++) {
-        ctx.strokeStyle = this.randomColor();
-        ctx.beginPath();
-        ctx.moveTo(Math.random() * width, Math.random() * height);
-        ctx.lineTo(Math.random() * width, Math.random() * height);
-        ctx.stroke();
-      }
-
-      // 驗證碼文字
-      const charWidth = width / code.length;
-      for (let i = 0; i < code.length; i++) {
-        ctx.font = `bold ${24 + Math.random() * 6}px Arial`;
-        ctx.fillStyle = this.randomColor(100);
-        ctx.save();
-
-        const x = charWidth * i + charWidth / 2;
-        const y = height / 2;
-
-        ctx.translate(x, y);
-        ctx.rotate((Math.random() - 0.5) * 0.7); // -0.35 ~ +0.35 弧度
-        ctx.fillText(code[i], 0, 0);
-        ctx.restore();
-      }
-
-      // 干擾點
-      for (let i = 0; i < 30; i++) {
-        ctx.fillStyle = this.randomColor();
-        ctx.fillRect(Math.random() * width, Math.random() * height, 2, 2);
-      }
-
-      return canvas.toDataURL('image/png');
-    } catch (error) {
-      console.error('Generate captcha image failed:', error);
-      // Fallback：返回空圖片或拋出錯誤
-      throw new Error('Canvas not supported in this environment');
-    }
-  }
-
-  private randomColor(min: number = 0): string {
-    const r = Math.floor(Math.random() * (256 - min) + min);
-    const g = Math.floor(Math.random() * (256 - min) + min);
-    const b = Math.floor(Math.random() * (256 - min) + min);
-    return `rgb(${r},${g},${b})`;
+    throw new Error(
+      'CanvasCaptchaGenerator is not supported in Serverless environments. ' +
+      'Please use third-party CAPTCHA services (Google reCAPTCHA, hCaptcha) ' +
+      'or alternative solutions like math questions.'
+    );
   }
 }
