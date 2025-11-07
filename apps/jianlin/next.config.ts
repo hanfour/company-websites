@@ -113,8 +113,16 @@ const nextConfig: NextConfig = {
 
 // Injected content via Sentry wizard below
 
-// 只在有 SENTRY_AUTH_TOKEN 時才啟用 Sentry
-// 如果 token 無效或不存在，會跳過 Sentry 集成以避免 build 失敗
+// ⚠️ Sentry 暫時停用
+// 原因：專案名稱配置錯誤 (Project not found: javascript-nextjs)
+// 如需啟用：
+// 1. 前往 https://sentry.io/organizations/hanfourhuang/projects/
+// 2. 確認正確的專案 slug
+// 3. 更新下方 project 欄位
+// 4. 取消此註解
+export default nextConfig;
+
+/*
 export default process.env.SENTRY_AUTH_TOKEN
   ? withSentryConfig(nextConfig, {
       // For all available options, see:
@@ -158,3 +166,4 @@ export default process.env.SENTRY_AUTH_TOKEN
       automaticVercelMonitors: true,
     })
   : nextConfig;
+*/
