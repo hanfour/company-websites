@@ -1,8 +1,8 @@
-import Carousel from '@/components/ui/Carousel';
 import SeeMoreButton from '@/components/ui/SeeMoreButton';
 import { getCompanyData } from '@/app/actions';
 import { getImageUrl } from '@/lib/utils/image';
 import type { HomeContentItem } from '@/types';
+import HeroSection from './components/HeroSection';
 
 export default async function Home() {
   const company = await getCompanyData();
@@ -18,21 +18,9 @@ export default async function Home() {
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto -mt-[48px] md:-mt-[72px]">
+    <div className="w-full max-w-[1920px] mx-auto">
       {/* 輪播區塊 */}
-      <div className="flex w-full h-[calc(100vh-48px)] md:h-[calc(100vh-72px)]">
-        <div className="hidden md:block w-[4.166667%]"></div>
-        <div className="flex-1 h-full bg-gray-light">
-          {carousel.length > 0 && <Carousel items={carousel} />}
-        </div>
-        <a
-          href="#more"
-          className="hidden md:flex w-[4.166667%] flex-col justify-end items-center text-gray-600 no-underline cursor-pointer pb-8"
-        >
-          <span className="writing-mode-vertical-rl">SCROLL DOWN</span>
-          <span className="w-px h-32 bg-gray-400 mt-4"></span>
-        </a>
-      </div>
+      <HeroSection carousel={carousel} />
 
       {/* 動態區塊 */}
       {home.map((block, index) => {
