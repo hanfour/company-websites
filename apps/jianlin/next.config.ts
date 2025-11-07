@@ -113,47 +113,29 @@ const nextConfig: NextConfig = {
 
 // Injected content via Sentry wizard below
 
-// 只在有 SENTRY_AUTH_TOKEN 時才啟用 Sentry，避免 build 時的認證錯誤
+// ⚠️ Sentry 暫時停用
+// 原因：SENTRY_AUTH_TOKEN 無效（401 Unauthorized）
+// 如需啟用，請前往 https://sentry.io/settings/hanfourhuang/developer-settings/auth-tokens/
+// 重新產生有效的 auth token 並更新 Vercel 環境變數
+export default nextConfig;
+
+// 完整 Sentry 配置（已註解）
+/*
 export default process.env.SENTRY_AUTH_TOKEN
   ? withSentryConfig(nextConfig, {
-      // For all available options, see:
-      // https://github.com/getsentry/sentry-webpack-plugin#options
-
       org: "hanfourhuang",
       project: "javascript-nextjs",
-
-      // Only print logs for uploading source maps in CI
       silent: !process.env.CI,
-
-      // For all available options, see:
-      // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-      // Upload a larger set of source maps for prettier stack traces (increases build time)
       widenClientFileUpload: true,
-
-      // Automatically annotate React components to show their full name in breadcrumbs and session replay
       reactComponentAnnotation: {
         enabled: true,
       },
-
-      // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-      // This can increase your server load as well as your hosting bill.
-      // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-      // side errors will fail.
       tunnelRoute: "/monitoring",
-
-      // Configure source maps
       sourcemaps: {
         disable: false,
       },
-
-      // Automatically tree-shake Sentry logger statements to reduce bundle size
       disableLogger: true,
-
-      // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-      // See the following for more information:
-      // https://docs.sentry.io/product/crons/
-      // https://vercel.com/docs/cron-jobs
       automaticVercelMonitors: true,
     })
   : nextConfig;
+*/
