@@ -113,23 +113,14 @@ const nextConfig: NextConfig = {
 
 // Injected content via Sentry wizard below
 
-// ⚠️ Sentry 暫時停用
-// 原因：專案名稱配置錯誤 (Project not found: javascript-nextjs)
-// 如需啟用：
-// 1. 前往 https://sentry.io/organizations/hanfourhuang/projects/
-// 2. 確認正確的專案 slug
-// 3. 更新下方 project 欄位
-// 4. 取消此註解
-export default nextConfig;
-
-/*
+// 只在有 SENTRY_AUTH_TOKEN 時才啟用 Sentry
 export default process.env.SENTRY_AUTH_TOKEN
   ? withSentryConfig(nextConfig, {
       // For all available options, see:
       // https://github.com/getsentry/sentry-webpack-plugin#options
 
       org: "hanfourhuang",
-      project: "javascript-nextjs",
+      project: "jianlin",
 
       // Only print logs for uploading source maps in CI
       silent: !process.env.CI,
@@ -166,4 +157,3 @@ export default process.env.SENTRY_AUTH_TOKEN
       automaticVercelMonitors: true,
     })
   : nextConfig;
-*/
