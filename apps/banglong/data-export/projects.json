@@ -1,0 +1,115 @@
+{
+  "items": {
+    "cm985074t0000khxi7dxt6lsm": {
+      "id": "cm985074t0000khxi7dxt6lsm",
+      "title": "汐止．十五甲規劃案",
+      "description": null,
+      "category": "future",
+      "details": {
+        "items": []
+      },
+      "order": 1,
+      "isActive": true,
+      "createdAt": "2025-04-08T06:46:27.869Z",
+      "updatedAt": "2025-06-27T03:35:55.901Z"
+    },
+    "cm989r9q10001l704agaqkojk": {
+      "id": "cm989r9q10001l704agaqkojk",
+      "title": "鴻邦．世界花園I",
+      "description": null,
+      "category": "classic",
+      "details": {
+        "items": [
+          {
+            "label": "基地面積",
+            "value": "1100坪"
+          },
+          {
+            "label": "地址",
+            "value": "新北市新莊區天祥街32號"
+          },
+          {
+            "label": "坪數",
+            "value": "18~41坪"
+          },
+          {
+            "label": "總樓高",
+            "value": "15、18樓"
+          },
+          {
+            "label": "總戶數",
+            "value": "378戶"
+          }
+        ]
+      },
+      "order": 1,
+      "isActive": true,
+      "createdAt": "2025-04-08T08:59:29.402Z",
+      "updatedAt": "2025-06-27T03:35:55.901Z"
+    },
+    "cm989pfqt0000l704cilwqw12": {
+      "id": "cm989pfqt0000l704cilwqw12",
+      "title": "邦瓏雍玥",
+      "description": null,
+      "category": "new",
+      "details": {
+        "items": [
+          {
+            "label": "新莊區合鳳段",
+            "value": "129、133、134地號"
+          },
+          {
+            "label": "基地坪數",
+            "value": " 1436坪"
+          },
+          {
+            "label": " 樓層規劃",
+            "value": "23F、24F／B6"
+          }
+        ]
+      },
+      "order": 1,
+      "isActive": true,
+      "createdAt": "2025-04-08T08:58:03.893Z",
+      "updatedAt": "2025-06-27T03:52:12.205Z"
+    },
+    "cm989t7ga0002l7041tao885v": {
+      "id": "cm989t7ga0002l7041tao885v",
+      "title": "鴻邦．世界花園II",
+      "description": "台北市豪宅經典，重新定義城市高端居住",
+      "category": "classic",
+      "details": {
+        "items": [
+          {
+            "label": "基地面積",
+            "value": "115坪"
+          },
+          {
+            "label": "地址",
+            "value": "新北市新莊區天祥街17號"
+          },
+          {
+            "label": "坪數",
+            "value": "8~12坪"
+          },
+          {
+            "label": "總樓高",
+            "value": "11樓"
+          },
+          {
+            "label": "總戶數",
+            "value": "80戶"
+          }
+        ]
+      },
+      "order": 2,
+      "isActive": true,
+      "createdAt": "2025-04-08T09:00:59.770Z",
+      "updatedAt": "2025-06-27T03:35:55.901Z"
+    }
+  },
+  "metadata": {
+    "count": 4,
+    "lastUpdated": "2025-11-08T09:35:14.084Z"
+  }
+}

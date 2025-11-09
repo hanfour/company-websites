@@ -1,0 +1,20 @@
+{
+  "items": {
+    "cmhobt2hy0005khqfb6qxracg": {
+      "id": "cmhobt2hy0005khqfb6qxracg",
+      "title": "邦瓏雍玥",
+      "coverImageUrl": "https://ww2sb1ry85zp8ul0.public.blob.vercel-storage.com/%E6%9C%AA%E5%91%BD%E5%90%8D-2-ZxvqZx8Lx5K2PFCfYsoYObHEERCdOm.jpg",
+      "password": "$2b$10$j5ng/pVK6RFVqFgZjZi1SO5EXHYdyVn2Vw.l3NlVD5vYri9snlVPK",
+      "description": "邦瓏雍玥交屋手冊",
+      "order": 1,
+      "isActive": true,
+      "createdAt": "2025-11-07T03:58:50.086Z",
+      "updatedAt": "2025-11-07T10:06:28.957Z",
+      "projectId": null
+    }
+  },
+  "metadata": {
+    "count": 1,
+    "lastUpdated": "2025-11-08T09:35:14.903Z"
+  }
+}

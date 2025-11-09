@@ -1,0 +1,116 @@
+{
+  "items": {
+    "cmeibdx1c0000kz04o7ido0im": {
+      "id": "cmeibdx1c0000kz04o7ido0im",
+      "type": "seo",
+      "key": "title",
+      "value": "邦隆建設 - 匠心建築，豪宅典範",
+      "description": "網站標題",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1c0001kz04srpixebd": {
+      "id": "cmeibdx1c0001kz04srpixebd",
+      "type": "seo",
+      "key": "description",
+      "value": "邦隆建設專注於高品質住宅建築，以匠心精神打造台灣頂級豪宅，創造永續價值的居住空間。",
+      "description": "網站描述（通常顯示在搜索結果中）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1c0002kz048fetppx4": {
+      "id": "cmeibdx1c0002kz048fetppx4",
+      "type": "seo",
+      "key": "keywords",
+      "value": "邦隆建設,豪宅,建案,高級住宅,台灣建設公司",
+      "description": "網站關鍵字（以逗號分隔）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1c0003kz04u6kmixh5": {
+      "id": "cmeibdx1c0003kz04u6kmixh5",
+      "type": "seo",
+      "key": "ogImage",
+      "value": "",
+      "description": "Open Graph 圖片URL",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d0004kz04brrgmf9d": {
+      "id": "cmeibdx1d0004kz04brrgmf9d",
+      "type": "seo",
+      "key": "ogTitle",
+      "value": "",
+      "description": "Open Graph 標題（留空則使用網站標題）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d0005kz04rcmwn2v1": {
+      "id": "cmeibdx1d0005kz04rcmwn2v1",
+      "type": "seo",
+      "key": "ogDescription",
+      "value": "",
+      "description": "Open Graph 描述（留空則使用網站描述）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d0006kz04gm5kd26h": {
+      "id": "cmeibdx1d0006kz04gm5kd26h",
+      "type": "email",
+      "key": "receivers",
+      "value": "Services@banglong.com.tw",
+      "description": "通知信收件者（多個郵箱以逗號分隔）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d0007kz049t548dd5": {
+      "id": "cmeibdx1d0007kz049t548dd5",
+      "type": "email",
+      "key": "notificationTemplate",
+      "value": "您有新的客戶諮詢: {{name}} ({{email}}) {{phone}} 訊息: {{message}}",
+      "description": "通知郵件模板（支持 {{name}}, {{email}}, {{phone}}, {{message}} 變量）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d0008kz0441h1eyod": {
+      "id": "cmeibdx1d0008kz0441h1eyod",
+      "type": "advanced",
+      "key": "googleAnalytics",
+      "value": "",
+      "description": "Google Analytics 4 ID (格式如 G-XXXXXXXXXX)",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d0009kz04edqysukm": {
+      "id": "cmeibdx1d0009kz04edqysukm",
+      "type": "advanced",
+      "key": "headScripts",
+      "value": "",
+      "description": "插入到網頁 <head> 標籤中的自定義腳本代碼（如第三方分析工具）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d000akz04r6zauxod": {
+      "id": "cmeibdx1d000akz04r6zauxod",
+      "type": "advanced",
+      "key": "bodyStartScripts",
+      "value": "",
+      "description": "插入到網頁 <body> 標籤開始處的自定義腳本代碼",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    },
+    "cmeibdx1d000bkz04kuxb9gz9": {
+      "id": "cmeibdx1d000bkz04kuxb9gz9",
+      "type": "advanced",
+      "key": "bodyEndScripts",
+      "value": "",
+      "description": "插入到網頁 <body> 標籤結束處的自定義腳本代碼（如聊天插件等）",
+      "createdAt": "2025-08-19T09:01:18.672Z",
+      "updatedAt": "2025-08-19T09:01:18.672Z"
+    }
+  },
+  "metadata": {
+    "count": 12,
+    "lastUpdated": "2025-11-08T09:35:14.747Z"
+  }
+}

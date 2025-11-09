@@ -1,0 +1,34 @@
+{
+  "items": {
+    "cm8xy6u100000lc03zk42h5q9": {
+      "id": "cm8xy6u100000lc03zk42h5q9",
+      "title": "",
+      "imageUrl": "https://ww2sb1ry85zp8ul0.public.blob.vercel-storage.com/carousel_1743478674670_gq5kk0upgq6-aUgBr5nZeUvCH9mRebH2BgoMYhp8nA.jpg",
+      "linkUrl": null,
+      "order": 1,
+      "isActive": true,
+      "textPosition": "center",
+      "textDirection": "vertical",
+      "createdAt": "2025-04-01T03:37:58.404Z",
+      "updatedAt": "2025-04-01T03:38:38.755Z",
+      "linkText": null
+    },
+    "cm8xy7dvm0001lc03zgiifa7x": {
+      "id": "cm8xy7dvm0001lc03zgiifa7x",
+      "title": "",
+      "imageUrl": "https://ww2sb1ry85zp8ul0.public.blob.vercel-storage.com/carousel_1743478701730_9nmfll5zrgg-wj4j6KWjBzFFERYJZMbnR30VVYUubc.jpg",
+      "linkUrl": null,
+      "order": 2,
+      "isActive": true,
+      "textPosition": "center",
+      "textDirection": "horizontal",
+      "createdAt": "2025-04-01T03:38:24.130Z",
+      "updatedAt": "2025-04-01T03:38:38.755Z",
+      "linkText": null
+    }
+  },
+  "metadata": {
+    "count": 2,
+    "lastUpdated": "2025-11-08T09:35:13.932Z"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "items": {
+    "cm8ctwh9s0000khpzvti2uxim": {
+      "id": "cm8ctwh9s0000khpzvti2uxim",
+      "name": "管理員",
+      "email": "hanfourhuang@gmail.com",
+      "password": "$2b$10$bgbYlyCaP56MzjYZB9vgRu.e9iJQPa/vd6NjTni7C9i8qKe.3AYDG",
+      "role": "admin",
+      "createdAt": "2025-03-17T08:54:47.152Z",
+      "updatedAt": "2025-04-08T09:17:37.395Z",
+      "hasChangedPassword": true,
+      "resetToken": null,
+      "resetTokenExpiry": null
+    },
+    "cmhohmypj0000jp04rt4sieya": {
+      "id": "cmhohmypj0000jp04rt4sieya",
+      "name": "廖偉強",
+      "email": "dliao@hiyes1.tw",
+      "password": "$2b$10$KU9nvr6aGDXOrX362jP0wOlO3E02ZL5aRv/A3TAT1alS134ysFlni",
+      "role": "admin",
+      "createdAt": "2025-11-07T06:42:02.935Z",
+      "updatedAt": "2025-11-07T07:00:04.744Z",
+      "hasChangedPassword": false,
+      "resetToken": "1a4b116142f7d28b9d8de0b737bd32af68e15f05347b50eedcedc49e38af77a4",
+      "resetTokenExpiry": "2025-11-08T06:42:02.934Z"
+    }
+  },
+  "metadata": {
+    "count": 2,
+    "lastUpdated": "2025-11-08T09:35:13.774Z"
+  }
+}
