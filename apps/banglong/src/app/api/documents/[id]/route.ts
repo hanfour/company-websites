@@ -93,12 +93,9 @@ export async function POST(
     }
 
     // 記錄下載事件 (更新下載次數)
-    const updatedDoc = await storage.document.update({
-      where: { id },
-      data: {
-        downloadCount: (document.downloadCount || 0) + 1,
-        updatedAt: new Date()
-      }
+    const updatedDoc = await storage.document.update(id, {
+      downloadCount: (document.downloadCount || 0) + 1,
+      updatedAt: new Date()
     });
 
     return NextResponse.json({

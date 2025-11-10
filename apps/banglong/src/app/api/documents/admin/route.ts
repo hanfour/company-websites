@@ -177,10 +177,7 @@ export async function PATCH(request: NextRequest) {
     if (projectId !== undefined) updateData.projectId = projectId || null;
 
     // 更新文檔
-    const updatedDocument = await storage.document.update({
-      where: { id },
-      data: updateData
-    });
+    const updatedDocument = await storage.document.update(id, updateData);
 
     // 手動查詢關聯的 project 數據
     let projectData = null;
@@ -239,7 +236,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // 刪除文檔
-    await storage.document.delete({ where: { id } });
+    await storage.document.delete(id);
 
     return NextResponse.json({ message: '文檔刪除成功' });
   } catch (error) {

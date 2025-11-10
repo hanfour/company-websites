@@ -21,9 +21,8 @@ export async function POST(
     }
 
     // 更新下載次數
-    await storage.handbookFile.update({
-      where: { id: fileId },
-      data: { downloadCount: (file.downloadCount || 0) + 1 }
+    await storage.handbookFile.update(fileId, {
+      downloadCount: (file.downloadCount || 0) + 1
     });
 
     return NextResponse.json({ success: true });

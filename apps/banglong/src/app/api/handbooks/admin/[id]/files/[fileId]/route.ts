@@ -22,10 +22,7 @@ export async function PUT(
     if (data.title !== undefined) updateData.title = data.title;
     if (data.order !== undefined) updateData.order = data.order;
 
-    const file = await storage.handbookFile.update({
-      where: { id: fileId },
-      data: updateData,
-    });
+    const file = await storage.handbookFile.update(fileId, updateData);
 
     return NextResponse.json({ file });
   } catch (error) {
@@ -48,9 +45,7 @@ export async function DELETE(
   try {
     const { fileId } = await params;
 
-    await storage.handbookFile.delete({
-      where: { id: fileId },
-    });
+    await storage.handbookFile.delete(fileId);
 
     return NextResponse.json({ success: true });
   } catch (error) {

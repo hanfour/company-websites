@@ -40,10 +40,7 @@ export async function PUT(
       updateData.password = await bcrypt.hash(data.password, 10);
     }
 
-    const handbook = await storage.handbook.update({
-      where: { id },
-      data: updateData
-    });
+    const handbook = await storage.handbook.update(id, updateData);
 
     // 手動查詢關聯的 project 數據
     let projectData = null;
@@ -81,9 +78,7 @@ export async function DELETE(
     const { id } = await params;
 
     // 刪除手冊 (會自動 cascade 刪除關聯的 HandbookFile)
-    await storage.handbook.delete({
-      where: { id },
-    });
+    await storage.handbook.delete(id);
 
     return NextResponse.json({ success: true });
   } catch (error) {
