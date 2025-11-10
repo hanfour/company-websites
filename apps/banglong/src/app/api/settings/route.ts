@@ -62,11 +62,11 @@ export async function POST(request: Request) {
   try {
     // 驗證管理員身份
     const session = await getServerSession(authOptions);
-    
-    if (!session) {
+
+    if (!session || session.user?.role !== 'ADMIN') {
       return NextResponse.json(
-        { error: '未授權的請求' },
-        { status: 401 }
+        { error: '需要管理員權限' },
+        { status: 403 }
       );
     }
     
@@ -121,11 +121,11 @@ export async function PUT(request: Request) {
   try {
     // 驗證管理員身份
     const session = await getServerSession(authOptions);
-    
-    if (!session) {
+
+    if (!session || session.user?.role !== 'ADMIN') {
       return NextResponse.json(
-        { error: '未授權的請求' },
-        { status: 401 }
+        { error: '需要管理員權限' },
+        { status: 403 }
       );
     }
     
@@ -185,11 +185,11 @@ export async function DELETE(request: Request) {
   try {
     // 驗證管理員身份
     const session = await getServerSession(authOptions);
-    
-    if (!session) {
+
+    if (!session || session.user?.role !== 'ADMIN') {
       return NextResponse.json(
-        { error: '未授權的請求' },
-        { status: 401 }
+        { error: '需要管理員權限' },
+        { status: 403 }
       );
     }
     

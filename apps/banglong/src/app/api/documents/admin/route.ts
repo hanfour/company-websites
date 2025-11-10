@@ -2,17 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '@/lib/storage';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth-helper';
 
 const storage = getStorage();
 
 // 獲取所有文檔列表（管理員用）
 export async function GET(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查用戶是否已認證
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權訪問' }, { status: 401 });
-    }
 
     const searchParams = request.nextUrl.searchParams;
     const category = searchParams.get('category') || undefined;
@@ -76,12 +75,10 @@ export async function GET(request: NextRequest) {
 
 // 新增文檔
 export async function POST(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查用戶是否已認證
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權訪問' }, { status: 401 });
-    }
 
     const body = await request.json();
     const { title, description, fileUrl, imageUrl, fileType, category, projectId, isActive } = body;
@@ -141,12 +138,10 @@ export async function POST(request: NextRequest) {
 
 // 更新文檔
 export async function PATCH(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查用戶是否已認證
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權訪問' }, { status: 401 });
-    }
 
     const body = await request.json();
     const { id, title, description, fileUrl, imageUrl, fileType, category, projectId, order, isActive } = body;
@@ -225,12 +220,10 @@ export async function PATCH(request: NextRequest) {
 
 // 刪除文檔
 export async function DELETE(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查用戶是否已認證
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權訪問' }, { status: 401 });
-    }
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

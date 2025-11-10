@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '@/lib/storage';
+import { requireAdmin } from '@/lib/auth-helper';
 
 const storage = getStorage();
 import { getServerSession } from 'next-auth';
@@ -9,13 +10,11 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; fileId: string }> }
 ) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const { fileId } = await params;
-    // 驗證認證
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
-    }
 
     const data = await request.json();
     const updateData: any = {};
@@ -43,13 +42,11 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; fileId: string }> }
 ) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const { fileId } = await params;
-    // 驗證認證
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
-    }
 
     await storage.handbookFile.delete({
       where: { id: fileId },

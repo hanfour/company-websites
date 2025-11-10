@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '@/lib/storage';
+import { requireAdmin } from '@/lib/auth-helper';
 
 const storage = getStorage();
 import { getServerSession } from 'next-auth';
 
 // 批次更新手冊排序
 export async function POST(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 驗證認證
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
-    }
 
     const { handbooks } = await request.json();
 

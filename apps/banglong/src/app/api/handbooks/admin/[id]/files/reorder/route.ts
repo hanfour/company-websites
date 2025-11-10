@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '@/lib/storage';
+import { requireAdmin } from '@/lib/auth-helper';
 
 const storage = getStorage();
 import { getServerSession } from 'next-auth';
@@ -9,12 +10,10 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 驗證認證
-    const session = await getServerSession();
-    if (!session) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
-    }
 
     const { files } = await request.json();
 

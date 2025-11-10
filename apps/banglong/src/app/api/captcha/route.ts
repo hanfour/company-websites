@@ -57,13 +57,19 @@ export async function GET(req: NextRequest) {
     
     // 由於移除了 canvas 依賴，此處回傳純文本驗證碼
     // 在實際生產環境中，應使用其他替代方案產生圖形驗證碼
-    
-    // 返回驗證碼ID和純文本驗證碼（測試環境使用）
-    return NextResponse.json({
+
+    // 根據環境決定是否返回驗證碼明文
+    const response: { success: boolean; captchaId: string; captchaText?: string } = {
       success: true,
       captchaId,
-      captchaText: code, // 注意：在生產環境中不應回傳明文驗證碼
-    });
+    };
+
+    // 僅在開發環境返回明文驗證碼 (方便測試)
+    if (process.env.NODE_ENV !== 'production') {
+      response.captchaText = code;
+    }
+
+    return NextResponse.json(response);
     
   } catch (error) {
     console.error('生成驗證碼時發生錯誤:', error);

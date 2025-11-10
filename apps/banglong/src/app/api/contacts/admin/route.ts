@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '@/lib/storage';
+import { requireAdmin } from '@/lib/auth-helper';
 
 const storage = getStorage();
 import { getServerSession } from 'next-auth';
@@ -8,12 +9,10 @@ import { Archive } from 'lucide-react';
 
 // 獲取所有聯絡表單提交
 export async function GET(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查用戶是否已認證
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權訪問' }, { status: 401 });
-    }
 
     // 獲取查詢參數
     const searchParams = request.nextUrl.searchParams;
@@ -114,12 +113,10 @@ export async function GET(request: NextRequest) {
 
 // 更新聯絡表單提交狀態
 export async function PATCH(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查用戶是否已認證
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權訪問' }, { status: 401 });
-    }
     
     const body = await request.json();
     const { id, status, reply, archived } = body;

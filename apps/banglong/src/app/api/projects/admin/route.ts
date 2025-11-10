@@ -2,17 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStorage } from '@/lib/storage';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth-helper';
 
 const storage = getStorage();
 
 // 獲取後台專案列表
 export async function GET(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查管理員身份
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
-    }
 
     const searchParams = request.nextUrl.searchParams;
     const category = searchParams.get('category') || undefined;
@@ -62,12 +61,10 @@ export async function GET(request: NextRequest) {
 
 // 創建新專案
 export async function POST(request: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
-    // 檢查管理員身份
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: '未授權' }, { status: 401 });
-    }
 
     const body = await request.json();
     const { title, description, category, images, details, isActive } = body;

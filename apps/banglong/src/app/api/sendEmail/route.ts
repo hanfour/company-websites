@@ -36,11 +36,29 @@ export async function POST(request: NextRequest) {
     
     const { subject, captcha, captchaId, isAdminReply } = validationResult.data;
     let emailBody = validationResult.data.body;
-    
+
+    // 驗證 captcha (後端驗證)
+    // 動態導入 verifyCaptcha 避免循環依賴
+    const { verifyCaptcha } = await import('@/app/api/captcha/route');
+    const isCaptchaValid = verifyCaptcha(captchaId, captcha);
+
+    if (!isCaptchaValid) {
+      console.log('驗證碼驗證失敗', { captchaId, captcha });
+      return NextResponse.json(
+        {
+          success: false,
+          message: '驗證碼錯誤或已過期'
+        },
+        { status: 400 }
+      );
+    }
+
+    console.log('驗證碼驗證成功');
+
     // 從設定獲取收件人列表或使用指定的收件人
     // 如果是管理員回覆，使用指定的收件人
     let to = validationResult.data.to || ""; // 默認或指定的收件人
-    
+
     try {
       // 如果不是管理員回覆，則從設定中獲取收件人和模板
       if (!isAdminReply) {
@@ -83,9 +101,6 @@ export async function POST(request: NextRequest) {
       console.error('獲取收件人設定時發生錯誤:', error);
       // 使用默認收件人繼續
     }
-    
-    // 由於前端已進行驗證碼驗證，此處只記錄
-    console.log('跳過後端驗證碼驗證，直接處理郵件發送', { captchaId, captcha });
 
     // 記錄郵件內容
     console.log('發送郵件:', {
