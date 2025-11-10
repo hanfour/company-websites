@@ -22,7 +22,8 @@ export async function requireAdmin(): Promise<NextResponse | null> {
     );
   }
 
-  if (session.user?.role !== 'ADMIN') {
+  // 不區分大小寫比較 (支援 'ADMIN' 或 'admin')
+  if (session.user?.role?.toUpperCase() !== 'ADMIN') {
     return NextResponse.json(
       { error: '需要管理員權限' },
       { status: 403 }
