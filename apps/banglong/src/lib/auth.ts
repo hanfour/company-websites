@@ -1,11 +1,11 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { prisma } from '@/lib/db';
+import { getStorage } from '@/lib/storage';
 import bcrypt from 'bcrypt';
 
+const storage = getStorage();
+
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: '邦隆建設管理系統',
@@ -18,9 +18,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        });
+        const user = await storage.user.findByEmail(credentials.email);
 
         if (!user) {
           return null;
