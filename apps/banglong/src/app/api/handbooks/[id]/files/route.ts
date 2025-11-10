@@ -11,10 +11,7 @@ export async function GET(
   try {
     const { id } = await params;
     // 驗證手冊是否存在
-    const handbook = await storage.handbook.findUnique({
-      where: { id },
-      select: { id: true },
-    });
+    const handbook = await storage.handbook.findUnique(id);
 
     if (!handbook) {
       return NextResponse.json(
@@ -26,7 +23,7 @@ export async function GET(
     // 獲取文件列表
     const files = await storage.handbookFile.findMany({
       where: { handbookId: id },
-      orderBy: { order: 'asc' },
+      orderBy: { field: 'order', direction: 'asc' },
     });
 
     return NextResponse.json({ files });

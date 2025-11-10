@@ -21,11 +21,8 @@ export async function POST(
       );
     }
 
-    // 獲取手冊 (只取密碼欄位)
-    const handbook = await storage.handbook.findUnique({
-      where: { id },
-      select: { password: true },
-    });
+    // 獲取手冊
+    const handbook = await storage.handbook.findUnique(id);
 
     // 檢查手冊是否存在
     if (!handbook) {
