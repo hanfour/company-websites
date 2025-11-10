@@ -45,3 +45,6 @@ next-env.d.ts
 # Sentry Config File
 .sentryclirc
 .sentry-*
+apps/jianlin/.env.jianlin-production
+**/*.env.*
+**/JSON_STORAGE_COMPLETE.md
