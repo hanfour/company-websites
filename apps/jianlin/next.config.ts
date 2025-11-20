@@ -6,12 +6,16 @@ const nextConfig: NextConfig = {
   compress: true, // Gzip 壓縮
   poweredByHeader: false, // 隱藏 X-Powered-By 標頭（安全性）
 
-  // Webpack 配置：忽略不需要的原生模組
+  // Turbopack 配置（Next.js 16 默認啟用）
+  // 注意：Turbopack 不支持 false 值，需要使用空模組路徑
+  turbopack: {},
+
+  // Webpack 配置：保留以兼容舊構建（當使用 --webpack 時）
   webpack: (config) => {
     config.resolve = config.resolve || {};
     config.resolve.fallback = {
       ...config.resolve.fallback,
-      canvas: false, // 忽略 canvas 模組（來自 @repo/api-template 的 CanvasCaptchaGenerator）
+      canvas: false, // 忽略 canvas 模組
     };
     return config;
   },
