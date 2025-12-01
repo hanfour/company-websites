@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 
+export const maxDuration = 120; // 延長超時到 120 秒
+
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   

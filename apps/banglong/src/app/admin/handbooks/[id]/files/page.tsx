@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { FileUploadDropZone } from '@/components/FileUploadDropZone';
 import { Loader2, Upload, Edit, Trash2, File, FileText } from 'lucide-react';
 
 interface HandbookFile {
@@ -25,7 +26,7 @@ export default function HandbookFilesPage() {
   const [files, setFiles] = useState<HandbookFile[]>([]);
   const [handbookTitle, setHandbookTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
+  const [uploadErrors, setUploadErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -59,50 +60,48 @@ export default function HandbookFilesPage() {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleFilesUploaded = async (fileUrls: (string | null)[]) => {
+    const successErrors: string[] = [];
 
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      // 先上傳文件
-      const uploadResponse = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const uploadData = await uploadResponse.json();
-
-      if (!uploadResponse.ok) {
-        throw new Error(uploadData.error || '上傳失敗');
+    for (const fileUrl of fileUrls) {
+      if (!fileUrl) {
+        successErrors.push('某個文件上傳失敗');
+        continue;
       }
 
-      // 建立文件記錄
-      const createResponse = await fetch(`/api/handbooks/admin/${handbookId}/files`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: file.name,
-          fileUrl: uploadData.url,
-          fileType: file.name.split('.').pop() || 'unknown',
-          fileSize: file.size,
-          order: files.length,
-        }),
-      });
+      try {
+        // 從 URL 提取文件名（Vercel Blob 返回的 URL 格式）
+        const fileName = new URL(fileUrl).pathname.split('/').pop() || '上傳的文件';
+        const fileType = fileName.split('.').pop() || 'unknown';
 
-      if (!createResponse.ok) {
-        throw new Error('建立文件記錄失敗');
+        // 建立文件記錄
+        const createResponse = await fetch(`/api/handbooks/admin/${handbookId}/files`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: fileName,
+            fileUrl,
+            fileType,
+            fileSize: null,
+            order: files.length,
+          }),
+        });
+
+        if (!createResponse.ok) {
+          successErrors.push(`創建 ${fileName} 的文件記錄失敗`);
+          continue;
+        }
+      } catch (err) {
+        successErrors.push('創建文件記錄失敗');
       }
-
-      fetchFiles();
-    } catch (err) {
-      alert('上傳失敗');
-    } finally {
-      setIsUploading(false);
     }
+
+    if (successErrors.length > 0) {
+      setUploadErrors(successErrors);
+      setTimeout(() => setUploadErrors([]), 5000);
+    }
+
+    fetchFiles();
   };
 
   const handleDelete = async (fileId: string) => {
@@ -159,19 +158,23 @@ export default function HandbookFilesPage() {
       </div>
 
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <label className="flex items-center justify-center space-x-2 px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-amber-500 hover:bg-amber-50">
-          <Upload className="h-6 w-6 text-gray-400" />
-          <span className="text-gray-600">
-            {isUploading ? '上傳中...' : '點擊上傳文件 (PDF, DOC, DOCX, PPT, PPTX)'}
-          </span>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx,.ppt,.pptx"
-            onChange={handleFileUpload}
-            className="hidden"
-            disabled={isUploading}
-          />
-        </label>
+        <h2 className="text-lg font-semibold mb-4">上傳文件</h2>
+        <FileUploadDropZone
+          onFilesUploaded={handleFilesUploaded}
+          acceptedTypes={['.pdf', '.doc', '.docx', '.ppt', '.pptx']}
+          multiple={true}
+        />
+
+        {uploadErrors.length > 0 && (
+          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="text-sm font-medium text-red-800 mb-2">上傳警告：</div>
+            <ul className="space-y-1 text-sm text-red-600">
+              {uploadErrors.map((error, idx) => (
+                <li key={idx}>• {error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
