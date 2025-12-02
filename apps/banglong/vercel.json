@@ -1,4 +1,6 @@
 {
+  "buildCommand": "cd ../.. && npm install && cd apps/banglong && npm run build",
+  "installCommand": "cd ../.. && npm install",
   "functions": {
     "src/app/api/upload/route.ts": {
       "maxDuration": 120,
