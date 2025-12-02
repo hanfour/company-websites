@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { put } from '@vercel/blob';
+import { put, del } from '@vercel/blob';
 
 export const maxDuration = 300; // 5 分鐘超時
 
@@ -60,23 +60,52 @@ export async function POST(request: Request) {
       );
     }
 
-    // 模擬：將分塊合併（實際應用中需要從儲存中讀取）
-    // 這裡直接上傳一個虛擬合併後的文件到 Vercel Blob
-    // 注：在生產環境中，應該實現真實的分塊存儲和合併邏輯
+    const chunkUrls = uploadSession.chunkUrls as Record<string, string>;
 
     try {
-      // 建立合併後的虛擬 blob
-      const mergedFile = new File(
-        [new ArrayBuffer(uploadSession.totalSize)],
-        fileName,
-        { type: 'application/octet-stream' }
-      );
+      // 1. 下載所有 chunks 並按順序合併
+      const chunkBuffers: ArrayBuffer[] = [];
 
-      const blob = await put(fileName, mergedFile, {
+      for (let i = 0; i < uploadSession.totalChunks; i++) {
+        const chunkUrl = chunkUrls[i.toString()];
+        if (!chunkUrl) {
+          throw new Error(`分塊 ${i} 的 URL 不存在`);
+        }
+
+        // 從 Blob 下載 chunk
+        const response = await fetch(chunkUrl);
+        if (!response.ok) {
+          throw new Error(`下載分塊 ${i} 失敗: ${response.statusText}`);
+        }
+
+        const buffer = await response.arrayBuffer();
+        chunkBuffers.push(buffer);
+      }
+
+      // 2. 合併所有 chunks
+      const totalLength = chunkBuffers.reduce((sum, buf) => sum + buf.byteLength, 0);
+      const mergedBuffer = new Uint8Array(totalLength);
+      let offset = 0;
+
+      for (const buffer of chunkBuffers) {
+        mergedBuffer.set(new Uint8Array(buffer), offset);
+        offset += buffer.byteLength;
+      }
+
+      // 3. 上傳合併後的文件（使用原始文件名，保留中文）
+      const blob = await put(fileName, mergedBuffer.buffer, {
         access: 'public',
       });
 
-      // 更新 session 狀態
+      // 4. 清理臨時 chunks
+      const deletePromises = Object.values(chunkUrls).map((url) =>
+        del(url).catch((err) => {
+          console.error(`刪除臨時 chunk 失敗: ${url}`, err);
+        })
+      );
+      await Promise.allSettled(deletePromises);
+
+      // 5. 更新 session 狀態
       await prisma.uploadSession.update({
         where: { id: uploadId },
         data: {
@@ -89,14 +118,14 @@ export async function POST(request: Request) {
         success: true,
         fileName,
         fileUrl: blob.url,
-        fileSize: uploadSession.totalSize,
+        fileSize: totalLength,
         uploadId,
       });
     } catch (blobError) {
-      console.error('Vercel Blob 上傳失敗:', blobError);
+      console.error('文件合併失敗:', blobError);
       return NextResponse.json(
         {
-          error: '合併文件上傳失敗',
+          error: '合併文件失敗',
           details: blobError instanceof Error ? blobError.message : '未知錯誤',
         },
         { status: 500 }

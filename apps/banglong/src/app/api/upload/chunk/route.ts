@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { put } from '@vercel/blob';
 
 export const maxDuration = 120;
 
@@ -56,6 +57,8 @@ export async function POST(request: Request) {
 
     // 檢查該分塊是否已上傳
     const uploadedChunks = uploadSession.uploadedChunks as string[];
+    const chunkUrls = (uploadSession.chunkUrls as Record<string, string>) || {};
+
     if (uploadedChunks.includes(chunkIndex)) {
       return NextResponse.json(
         {
@@ -69,14 +72,24 @@ export async function POST(request: Request) {
       );
     }
 
-    // 這裡可以添加邏輯來實際存儲分塊
-    // 暫時：只更新已上傳分塊列表
-    const newUploadedChunks = [...uploadedChunks, chunkIndex];
+    // 上傳 chunk 到 Vercel Blob
+    const chunkPath = `${uploadSession.tempPath}/chunk-${chunkIdx}`;
+    const blob = await put(chunkPath, chunk, {
+      access: 'public',
+    });
 
-    const updatedSession = await prisma.uploadSession.update({
+    // 更新已上傳分塊列表和 URL 映射
+    const newUploadedChunks = [...uploadedChunks, chunkIndex];
+    const newChunkUrls = {
+      ...chunkUrls,
+      [chunkIndex]: blob.url,
+    };
+
+    await prisma.uploadSession.update({
       where: { id: uploadId },
       data: {
         uploadedChunks: newUploadedChunks,
+        chunkUrls: newChunkUrls,
         updatedAt: new Date(),
       },
     });
@@ -85,6 +98,7 @@ export async function POST(request: Request) {
       message: '分塊上傳成功',
       uploadId,
       chunkIndex: chunkIdx,
+      chunkUrl: blob.url,
       uploadedChunks: newUploadedChunks.length,
       totalChunks: uploadSession.totalChunks,
     });

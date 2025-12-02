@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { FileUploadDropZone } from '@/components/FileUploadDropZone';
-import { Loader2, Upload, Edit, Trash2, File, FileText } from 'lucide-react';
+import { Loader2, Upload, Edit, Trash2, File, FileText, Eye, X, Check } from 'lucide-react';
 
 interface HandbookFile {
   id: string;
@@ -27,6 +27,8 @@ export default function HandbookFilesPage() {
   const [handbookTitle, setHandbookTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [uploadErrors, setUploadErrors] = useState<string[]>([]);
+  const [editingFileId, setEditingFileId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState('');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -60,39 +62,39 @@ export default function HandbookFilesPage() {
     }
   };
 
-  const handleFilesUploaded = async (fileUrls: (string | null)[]) => {
+  const handleFilesUploaded = async (
+    results: Array<{ url: string | null; fileName: string; fileSize: number }>
+  ) => {
     const successErrors: string[] = [];
 
-    for (const fileUrl of fileUrls) {
-      if (!fileUrl) {
-        successErrors.push('某個文件上傳失敗');
+    for (const result of results) {
+      if (!result.url) {
+        successErrors.push(`文件 ${result.fileName} 上傳失敗`);
         continue;
       }
 
       try {
-        // 從 URL 提取文件名（Vercel Blob 返回的 URL 格式）
-        const fileName = new URL(fileUrl).pathname.split('/').pop() || '上傳的文件';
-        const fileType = fileName.split('.').pop() || 'unknown';
+        const fileType = result.fileName.split('.').pop() || 'unknown';
 
-        // 建立文件記錄
+        // 建立文件記錄，使用真實的文件名和文件大小
         const createResponse = await fetch(`/api/handbooks/admin/${handbookId}/files`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            title: fileName,
-            fileUrl,
+            title: result.fileName,
+            fileUrl: result.url,
             fileType,
-            fileSize: null,
+            fileSize: result.fileSize,
             order: files.length,
           }),
         });
 
         if (!createResponse.ok) {
-          successErrors.push(`創建 ${fileName} 的文件記錄失敗`);
+          successErrors.push(`創建 ${result.fileName} 的文件記錄失敗`);
           continue;
         }
       } catch (err) {
-        successErrors.push('創建文件記錄失敗');
+        successErrors.push(`創建 ${result.fileName} 的文件記錄失敗`);
       }
     }
 
@@ -120,6 +122,40 @@ export default function HandbookFilesPage() {
     } catch (err) {
       alert('刪除失敗');
     }
+  };
+
+  const startEdit = (file: HandbookFile) => {
+    setEditingFileId(file.id);
+    setEditingTitle(file.title);
+  };
+
+  const cancelEdit = () => {
+    setEditingFileId(null);
+    setEditingTitle('');
+  };
+
+  const saveEdit = async (fileId: string) => {
+    try {
+      const response = await fetch(`/api/handbooks/admin/${handbookId}/files/${fileId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: editingTitle }),
+      });
+
+      if (!response.ok) {
+        throw new Error('更新失敗');
+      }
+
+      setEditingFileId(null);
+      setEditingTitle('');
+      fetchFiles();
+    } catch (err) {
+      alert('更新文件名失敗');
+    }
+  };
+
+  const handlePreview = (fileUrl: string) => {
+    window.open(fileUrl, '_blank');
   };
 
   const formatFileSize = (bytes?: number | null) => {
@@ -203,8 +239,36 @@ export default function HandbookFilesPage() {
               <tr key={file.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4">{getFileIcon(file.fileType)}</td>
                 <td className="px-6 py-4">
-                  <div className="text-sm font-medium text-gray-900">{file.title}</div>
-                  <div className="text-sm text-gray-500">{file.fileType.toUpperCase()}</div>
+                  {editingFileId === file.id ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editingTitle}
+                        onChange={(e) => setEditingTitle(e.target.value)}
+                        className="text-sm font-medium text-gray-900 border border-gray-300 rounded px-2 py-1 flex-1"
+                        autoFocus
+                      />
+                      <button
+                        onClick={() => saveEdit(file.id)}
+                        className="text-green-600 hover:text-green-900"
+                        title="保存"
+                      >
+                        <Check className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="text-gray-600 hover:text-gray-900"
+                        title="取消"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="text-sm font-medium text-gray-900">{file.title}</div>
+                      <div className="text-sm text-gray-500">{file.fileType.toUpperCase()}</div>
+                    </>
+                  )}
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm text-gray-500">{formatFileSize(file.fileSize)}</div>
@@ -213,13 +277,32 @@ export default function HandbookFilesPage() {
                   <div className="text-sm text-gray-500">{file.downloadCount} 次</div>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium">
-                  <button
-                    onClick={() => handleDelete(file.id)}
-                    className="text-red-600 hover:text-red-900 inline-flex items-center"
-                  >
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    刪除
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handlePreview(file.fileUrl)}
+                      className="text-blue-600 hover:text-blue-900 inline-flex items-center"
+                      title="預覽"
+                    >
+                      <Eye className="h-4 w-4 mr-1" />
+                      預覽
+                    </button>
+                    <button
+                      onClick={() => startEdit(file)}
+                      className="text-amber-600 hover:text-amber-900 inline-flex items-center"
+                      title="編輯"
+                    >
+                      <Edit className="h-4 w-4 mr-1" />
+                      編輯
+                    </button>
+                    <button
+                      onClick={() => handleDelete(file.id)}
+                      className="text-red-600 hover:text-red-900 inline-flex items-center"
+                      title="刪除"
+                    >
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      刪除
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

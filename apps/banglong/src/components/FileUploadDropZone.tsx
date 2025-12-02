@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { useChunkedUpload, UploadProgress } from '@/lib/hooks/useChunkedUpload';
 
 interface FileUploadDropZoneProps {
-  onFilesUploaded: (urls: (string | null)[]) => void;
+  onFilesUploaded: (results: Array<{ url: string | null; fileName: string; fileSize: number }>) => void;
   maxFileSize?: number; // 字節，預設無限制
   acceptedTypes?: string[];
   multiple?: boolean;
@@ -63,7 +63,12 @@ export function FileUploadDropZone({
 
     try {
       const urls = await uploadMultipleFiles(valid);
-      onFilesUploaded(urls);
+      const results = urls.map((url, index) => ({
+        url,
+        fileName: valid[index].name,
+        fileSize: valid[index].size,
+      }));
+      onFilesUploaded(results);
     } catch (error) {
       setErrors([
         error instanceof Error ? error.message : '上傳失敗',
