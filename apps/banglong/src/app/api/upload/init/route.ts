@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
-const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+const CHUNK_SIZE = 4 * 1024 * 1024; // 4MB (Vercel body limit is 4.5MB)
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
