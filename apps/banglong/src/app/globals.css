@@ -111,10 +111,17 @@ html.hydrated {
     writing-mode: vertical-rl;
     text-orientation: upright;
   }
-  
+
   .vertical-text {
     writing-mode: vertical-rl;
     text-orientation: mixed;
+  }
+}
+
+/* 超大屏幕 (>1920px) 网格四列布局 */
+@media (min-width: 1920px) {
+  .grid-4k-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

@@ -1,39 +1,88 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { unstable_cache } from 'next/cache';
 import Breadcrumb from '@/components/front/Breadcrumb';
 import WelcomeMessage from '@/components/front/WelcomeMessage';
-import HandbookCard from '@/components/front/HandbookCard';
 import { HandbookPublic } from '@/types/handbook';
-import { Loader2 } from 'lucide-react';
+import { getStorage } from '@/lib/storage';
+import Link from 'next/link';
+import Image from 'next/image';
 
-export default function HandbookPage() {
-  const router = useRouter();
-  const [handbooks, setHandbooks] = useState<HandbookPublic[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchHandbooks();
-  }, []);
-
-  const fetchHandbooks = async () => {
+// 獲取手冊數據，60 秒緩存
+const getHandbooks = unstable_cache(
+  async (): Promise<HandbookPublic[]> => {
     try {
-      const response = await fetch('/api/handbooks');
-      const data = await response.json();
+      const storage = getStorage();
+      const handbooks = await storage.handbook.findMany({
+        where: { isActive: true },
+        orderBy: { order: 'asc' }
+      });
 
-      if (!response.ok) {
-        throw new Error(data.error || '無法載入交屋手冊');
-      }
+      // 查詢關聯數據並排除密碼
+      const handbooksPublic = await Promise.all(
+        handbooks.map(async (handbook) => {
+          let projectData = null;
+          if (handbook.projectId) {
+            const project = await storage.project.findUnique(handbook.projectId);
+            if (project) {
+              projectData = { id: project.id, title: project.title };
+            }
+          }
 
-      setHandbooks(data.handbooks || []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '無法載入交屋手冊');
-    } finally {
-      setIsLoading(false);
+          return {
+            id: handbook.id,
+            title: handbook.title,
+            coverImageUrl: handbook.coverImageUrl,
+            description: handbook.description,
+            order: handbook.order,
+            projectId: handbook.projectId,
+            project: projectData
+          } as HandbookPublic;
+        })
+      );
+
+      return handbooksPublic;
+    } catch (error) {
+      console.error('Error fetching handbooks:', error);
+      return [];
     }
-  };
+  },
+  ['handbooks'],
+  { revalidate: 60, tags: ['handbooks'] }
+);
+
+// 內聯的 HandbookCard（支持 Link）
+function HandbookCardLink({ handbook }: { handbook: HandbookPublic }) {
+  return (
+    <Link
+      href={`/service/handbook/${handbook.id}`}
+      className="cursor-pointer transition-all duration-300 hover:scale-105 group block"
+    >
+      {/* 封面圖片 */}
+      <div className="relative w-full pt-[142%] bg-gray-200 overflow-hidden">
+        <Image
+          src={handbook.coverImageUrl}
+          alt={handbook.title}
+          fill
+          className="object-cover group-hover:brightness-95 transition-all"
+        />
+      </div>
+
+      {/* 標題 */}
+      <h3 className="text-center text-black text-sm md:text-base lg:text-lg font-medium mt-3 md:mt-4 group-hover:text-[#a48b78] transition-colors">
+        {handbook.title}︱交屋手冊
+      </h3>
+
+      {/* 專案標籤 */}
+      {handbook.project && (
+        <p className="text-center text-xs md:text-sm text-gray-500 mt-1">
+          {handbook.project.title}
+        </p>
+      )}
+    </Link>
+  );
+}
+
+export default async function HandbookPage() {
+  const handbooks = await getHandbooks();
 
   return (
     <div className="flex flex-col lg:flex-row min-h-[calc(100vh-160px)] lg:min-h-[calc(100vh-220px)]">
@@ -64,27 +113,14 @@ export default function HandbookPage() {
         <div className="w-full lg:flex-1 lg:pl-8 pb-12">
           <WelcomeMessage />
 
-          {isLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-amber-800" />
-              <span className="ml-2 text-gray-600">載入交屋手冊...</span>
-            </div>
-          ) : error ? (
-            <div className="flex items-center justify-center h-64 bg-gray-100 rounded-lg">
-              <p className="text-red-500">{error}</p>
-            </div>
-          ) : handbooks.length === 0 ? (
+          {handbooks.length === 0 ? (
             <div className="flex items-center justify-center h-64 bg-gray-100 rounded-lg">
               <p className="text-gray-500">目前尚無交屋手冊</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
               {handbooks.map((handbook) => (
-                <HandbookCard
-                  key={handbook.id}
-                  handbook={handbook}
-                  onClick={() => router.push(`/service/handbook/${handbook.id}`)}
-                />
+                <HandbookCardLink key={handbook.id} handbook={handbook} />
               ))}
             </div>
           )}
