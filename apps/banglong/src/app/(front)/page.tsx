@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import { unstable_cache } from 'next/cache';
 import FullscreenCarousel from '@/components/front/FullscreenCarousel';
+import { getStorage } from '@/lib/storage';
 
 // Define the CarouselItem interface
 interface CarouselItem {
@@ -15,7 +17,7 @@ interface CarouselItem {
   textDirection: string;
 }
 
-// 預設資料 - 當 API 加載失敗時顯示
+// 預設資料 - 當資料庫查詢失敗時顯示
 const fallbackItems: CarouselItem[] = [
   {
     id: '1',
@@ -43,31 +45,25 @@ const fallbackItems: CarouselItem[] = [
   },
 ];
 
-// 在伺服器端獲取輪播數據
-async function getCarouselItems(): Promise<CarouselItem[]> {
-  try {
-    // 使用相對於 API 的 URL (App Router 中的規範)
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/carousel`, {
-      cache: 'no-store', // 不緩存，每次請求新數據
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch carousel items: ${response.status}`);
+// 直接從 storage 獲取輪播數據，60 秒緩存
+const getCarouselItems = unstable_cache(
+  async (): Promise<CarouselItem[]> => {
+    try {
+      const storage = getStorage();
+      const items = await storage.carousel.findMany({
+        where: { isActive: true },
+        orderBy: { order: 'asc' }
+      });
+
+      return items.length > 0 ? (items as CarouselItem[]) : fallbackItems;
+    } catch (error) {
+      console.error('Error fetching carousel items:', error);
+      return fallbackItems;
     }
-    
-    const data = await response.json();
-    const items = data.carouselItems || [];
-    
-    // 如果 API 返回空列表，使用後備項目
-    return items.length > 0 ? items : fallbackItems;
-  } catch (error) {
-    console.error('Error fetching carousel items:', error);
-    return fallbackItems;
-  }
-}
+  },
+  ['carousel-items'],
+  { revalidate: 60, tags: ['carousel'] }
+);
 
 // 輪播數據載入組件
 async function CarouselData() {
